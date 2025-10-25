@@ -1,4 +1,4 @@
-package com.guanchedata.infrastructure.adapters;
+package com.guanchedata.infrastructure.adapters.bookprovider;
 
 public class GutenbergBookContentSeparator {
     private final String bookStart = "*** START OF THE PROJECT GUTENBERG EBOOK";

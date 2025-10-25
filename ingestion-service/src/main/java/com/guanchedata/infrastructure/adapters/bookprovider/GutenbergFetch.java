@@ -1,4 +1,4 @@
-package com.guanchedata.infrastructure.adapters;
+package com.guanchedata.infrastructure.adapters.bookprovider;
 
 import org.jsoup.Connection;
 import org.jsoup.HttpStatusException;

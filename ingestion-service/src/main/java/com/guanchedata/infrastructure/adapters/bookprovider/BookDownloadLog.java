@@ -1,4 +1,4 @@
-package com.guanchedata.infrastructure.adapters;
+package com.guanchedata.infrastructure.adapters.bookprovider;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,10 +29,11 @@ public class BookDownloadLog {
     }
 
     private Set<Integer> loadBooks() throws IOException {
-        if (!Files.exists(Paths.get(downloadedBookFile))) {
+        Path path = Paths.get(downloadedBookFile);
+        if (!Files.exists(path)) {
             return new HashSet<>();
         }
-        List<String> lines = Files.readAllLines(Paths.get(downloadedBookFile));
+        List<String> lines = Files.readAllLines(path);
         Set<Integer> books = new HashSet<>();
         for (String line : lines) {
             if (!line.trim().isEmpty()) {

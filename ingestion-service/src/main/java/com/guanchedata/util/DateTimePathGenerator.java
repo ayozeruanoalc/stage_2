@@ -1,18 +1,19 @@
-package com.guanchedata.infrastructure.adapters;
+package com.guanchedata.util;
 
 import com.guanchedata.infrastructure.ports.PathGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimePathGenerator implements PathGenerator {
-    private final Path datalakePath;
+    private final String datalakePath;
 
-    public DateTimePathGenerator(Path datalakePath) {
+    public DateTimePathGenerator(String datalakePath) {
         this.datalakePath = datalakePath;
     }
 
@@ -27,7 +28,7 @@ public class DateTimePathGenerator implements PathGenerator {
         String dateDirectory = instant.atZone(zone).format(dateFormatter);
         String timeDirectory = instant.atZone(zone).format(timeFormatter);
 
-        Path date = this.datalakePath.resolve(dateDirectory) ;
+        Path date = Paths.get(this.datalakePath).resolve(Paths.get(dateDirectory));
         Path time = date.resolve(timeDirectory);
 
         Files.createDirectories(time);
