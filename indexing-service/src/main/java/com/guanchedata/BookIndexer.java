@@ -1,6 +1,6 @@
 package com.guanchedata;
 
-import com.guanchedata.inverted_index.mongodb.MongoDB;
+import com.guanchedata.inverted_index.mongodb.MongoDBInvertedIndex;
 import com.guanchedata.metadata.parser.MetadataParser;
 import com.guanchedata.metadata.storage.sqlite.MetadataSQLiteDB;
 
@@ -27,7 +27,7 @@ public class BookIndexer {
 
         MetadataParser parser = new MetadataParser(this.datalakePath);
         MetadataSQLiteDB metadataDB = new MetadataSQLiteDB(parser, this.dbPath);
-        MongoDB mongoDB = new MongoDB(this.datalakePath, this.stopwordsPath, this.databaseName, this.collectionName);
+        MongoDBInvertedIndex mongoDB = new MongoDBInvertedIndex(this.datalakePath, this.stopwordsPath, this.databaseName, this.collectionName);
 
         Map<String, String> languages = metadataDB.saveMetadata(bookId);
         //System.out.println(languages);
