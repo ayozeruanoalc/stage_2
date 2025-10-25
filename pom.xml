@@ -10,6 +10,7 @@
 
     <modules>
         <!-- put module names here -->
+        <module>control</module>
     </modules>
 
     <properties>
