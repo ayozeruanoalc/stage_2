@@ -2,6 +2,8 @@ package com.guanchedata.metadata.storage.sqlite;
 
 import com.guanchedata.metadata.parser.MetadataParser;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
@@ -11,12 +13,10 @@ import java.util.Map;
 public class MetadataSQLiteDB  {
     private final MetadataParser metadataParser;
     private final Path dbPath;
-    private final Path dbFilePath;
 
     public MetadataSQLiteDB(MetadataParser metadataParser, String dbPathStr) {
         this.metadataParser = metadataParser;
         this.dbPath = Paths.get(dbPathStr);
-        this.dbFilePath = this.dbPath.resolve("metadata.db");
     }
 
     public Map<String, String> saveMetadata(int bookId) {
@@ -36,9 +36,12 @@ public class MetadataSQLiteDB  {
 
     private String insertMetadata(int id, String title, String author, String language, String year) {
         try {
-            dbPath.toFile().mkdirs();
+            Path parentDir = this.dbPath.getParent();
+            if (!Files.exists(parentDir)) {
+                Files.createDirectories(parentDir);
+            }
             if (id == 0 || title == null) return "error";
-            try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + dbFilePath)) {
+            try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + this.dbPath)) {
                 conn.createStatement().executeUpdate(
                         "CREATE TABLE IF NOT EXISTS metadata (" +
                                 "id INTEGER PRIMARY KEY, title TEXT NOT NULL, author TEXT, language TEXT, year TEXT)"
@@ -57,6 +60,8 @@ public class MetadataSQLiteDB  {
         } catch (SQLException e) {
             System.out.println("Error saving metadata: " + e.getMessage());
             return "error";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -18,7 +18,7 @@ public class IndexEraser {
     String collectionName;
 
     public IndexEraser(String metadataDbPath, String invertedIndexDbName, String collectionName){
-        this.metadataDbPath = Paths.get(metadataDbPath).resolve("metadata.db");
+        this.metadataDbPath = Paths.get(metadataDbPath);
         this.invertedIndexDbName = invertedIndexDbName;
         this.collectionName = collectionName;
     }

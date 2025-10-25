@@ -3,26 +3,30 @@ package com.guanchedata;
 import com.google.gson.Gson;
 import io.javalin.http.Context;
 
+import java.sql.SQLOutput;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class IndexingController {
-    BookIndexer bookIndexer;
-    IndexEraser indexEraser;
-    DatalakeBookIdExtractor datalakeBookIdExtractor;
-    Set<Integer> indexedBooksSet;
-    Instant last_update;
+    private BookIndexer bookIndexer;
+    private IndexEraser indexEraser;
+    private DatalakeBookIdExtractor datalakeBookIdExtractor;
+    private IndexSizeCalculator indexSizeCalculator;
+    private Set<Integer> indexedBooksSet;
+    private Instant last_update;
     private Gson gson;
 
-    public IndexingController(BookIndexer bookIndexer, IndexEraser indexEraser, DatalakeBookIdExtractor datalakeBookIdExtractor) {
+    public IndexingController(BookIndexer bookIndexer, IndexEraser indexEraser, DatalakeBookIdExtractor datalakeBookIdExtractor, IndexSizeCalculator indexSizeCalculator) {
         this.bookIndexer = bookIndexer;
         this.indexEraser = indexEraser;
         this.datalakeBookIdExtractor = datalakeBookIdExtractor;
-        this.indexedBooksSet = new HashSet<>();
-        this.last_update = null;
+        this.indexSizeCalculator = indexSizeCalculator;
+        this.indexedBooksSet = this.indexSizeCalculator.getAlreadyIndexedBooksSet();
+        this.last_update = Instant.EPOCH;
         this.gson = new Gson();
     }
 
@@ -50,12 +54,13 @@ public class IndexingController {
         ctx.result(gson.toJson(response));
     }
 
-    public void retrieveIndexingStatus(){
-        // TO DO
+    public void retrieveIndexingStatus(Context ctx){
+            Map<String, Object> response = Map.of(
+                    "books_indexed", this.indexedBooksSet.size(),
+                    "last_update", this.last_update.toString(),
+                    "index_size_MB", this.indexSizeCalculator.getTotalIndexSizeMB()
+            );
+            ctx.result(gson.toJson(response));
     }
-
-
-
-
 
 }
