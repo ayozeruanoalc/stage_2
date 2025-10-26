@@ -38,7 +38,7 @@ public class StateFileManager {
             Map<Integer, StateEntry> loaded = gson.fromJson(content, MAP_TYPE);
             return (loaded != null) ? loaded : new HashMap<>();
         } catch (Exception e) {
-            System.err.println("⚠️ Corrupted state file, resetting: " + file);
+            System.err.println("Corrupted state file, resetting: " + file);
             try (BufferedWriter w = Files.newBufferedWriter(file)) {
                 w.write("{}");
             }

@@ -44,6 +44,13 @@ public class BookProcessor {
 
         status.ingestionStatus = monitor.waitUntilDownloaded(bookId, ingestionBase);
 
+        if ("not_available".equalsIgnoreCase(status.ingestionStatus) ||
+                "error".equalsIgnoreCase(status.ingestionStatus)) {
+            System.out.println("Skipping indexing for book " + bookId + " (ingestion failed).");
+            state.setError(bookId, "ingestion-" + status.ingestionStatus.toLowerCase());
+            return status;
+        }
+
         String indexUrl = indexingBase + "/index/update/" + bookId;
         state.setStage(bookId, PipelineStage.INDEXING);
         JsonObject idxResp = http.postJson(indexUrl, null);

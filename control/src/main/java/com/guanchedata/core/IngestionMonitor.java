@@ -35,6 +35,12 @@ public class IngestionMonitor {
                 return s;
             }
 
+            if ("not_available".equalsIgnoreCase(s) || "error".equalsIgnoreCase(s)) {
+                System.out.println("Book " + bookId + " not available — skipping.");
+                state.setError(bookId, "ingestion-" + s.toLowerCase());
+                return s.toLowerCase();
+            }
+
             if (Duration.between(start, Instant.now()).toMillis() > pollTimeoutMs) {
                 state.setError(bookId, "ingestion-timeout");
                 throw new RuntimeException("Timeout waiting ingestion " + bookId);
