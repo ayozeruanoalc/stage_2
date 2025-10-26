@@ -1,11 +1,9 @@
-package com.guanchedata;
+package com.guanchedata.api;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
-
-import java.util.Map;
 
 public class ApiClient {
 
