@@ -1,6 +1,5 @@
 package com.guanchedata.mongoDB;
 
-import com.guanchedata.sqlite.SQLiteConnector;
 import com.mongodb.client.*;
 import org.bson.Document;
 
