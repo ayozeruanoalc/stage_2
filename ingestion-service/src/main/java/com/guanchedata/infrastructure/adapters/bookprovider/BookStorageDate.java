@@ -25,7 +25,7 @@ public class BookStorageDate implements BookStorage {
         Path path = pathGenerator.generatePath();
 
         Path headerPath = path.resolve(String.format("%d_header.txt", bookId));
-        Path contentPath = path.resolve(String.format("%d_content.txt", bookId));
+        Path contentPath = path.resolve(String.format("%d_body.txt", bookId));
 
         Files.writeString(headerPath, header);
         Files.writeString(contentPath, body);

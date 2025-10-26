@@ -30,7 +30,6 @@ public class BookIndexer {
         MongoDBInvertedIndex mongoDB = new MongoDBInvertedIndex(this.datalakePath, this.stopwordsPath, this.databaseName, this.collectionName);
 
         Map<String, String> languages = metadataDB.saveMetadata(bookId);
-        //System.out.println(languages);
         mongoDB.buildIndexForBooks(bookId, languages);
 
     }

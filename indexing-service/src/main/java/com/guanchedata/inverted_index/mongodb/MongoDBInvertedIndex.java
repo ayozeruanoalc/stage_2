@@ -37,7 +37,7 @@ public class MongoDBInvertedIndex implements InvertedIndex {
         this.collection.createIndex(new Document("word", 1), new IndexOptions().unique(true));
     }
 
-    public  void saveIndexForBook(int bookId, Map<String, List<Integer>> positionMap) {
+    public void saveIndexForBook(int bookId, Map<String, List<Integer>> positionMap) {
         List<WriteModel<Document>> operation = new ArrayList<>();
         String bookIdStr = String.valueOf(bookId);
 
@@ -70,8 +70,7 @@ public class MongoDBInvertedIndex implements InvertedIndex {
         BookIndexProcessor processor = new BookIndexProcessor();
 
         try (Stream<Path> files = Files.walk(route)) {
-            files.filter(path -> path.getFileName().toString().matches("\\d+_.*body\\.txt"))
-                    .forEach(f -> processor.processBookFile(f, bookId, languageReferences, stopwordsPath, stopwordsCache, this));
+            files.filter(path -> path.getFileName().toString().matches("\\d+_.*body\\.txt")).forEach(f -> processor.processBookFile(f, bookId, languageReferences, stopwordsPath, stopwordsCache, this));
         } catch (IOException e) {
             e.printStackTrace();
         }
