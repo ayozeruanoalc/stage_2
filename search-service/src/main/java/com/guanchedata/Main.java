@@ -1,7 +1,9 @@
 package com.guanchedata;
 
-import com.guanchedata.mongoDB.MongoDBConnector;
-import com.guanchedata.sqlite.SQLiteConnector;
+import com.guanchedata.application.usecases.searchservice.SearchController;
+import com.guanchedata.infrastructure.adapters.apiservices.SearchService;
+import com.guanchedata.infrastructure.adapters.provider.index.MongoDBConnector;
+import com.guanchedata.infrastructure.adapters.provider.metadata.SQLiteConnector;
 
 import io.javalin.Javalin;
 import io.javalin.json.JavalinGson;

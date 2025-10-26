@@ -1,15 +1,17 @@
-package com.guanchedata.sqlite;
+package com.guanchedata.infrastructure.adapters.provider.metadata;
 
+import com.guanchedata.infrastructure.ports.MetadataProvider;
 import java.sql.*;
 import java.util.*;
 
-public class SQLiteConnector {
+public class SQLiteConnector implements MetadataProvider {
     private final String url;
 
     public SQLiteConnector(String url) {
         this.url = "jdbc:sqlite:" + url;
     }
 
+    @Override
     public List<Map<String, Object>> findMetadata(List<Integer> ids, Map<String, Object> filters) {
         List<Map<String, Object>> results = new ArrayList<>();
 

@@ -1,7 +1,7 @@
-package com.guanchedata;
+package com.guanchedata.infrastructure.adapters.apiservices;
 
-import com.guanchedata.mongoDB.MongoDBConnector;
-import com.guanchedata.sqlite.SQLiteConnector;
+import com.guanchedata.infrastructure.adapters.provider.index.MongoDBConnector;
+import com.guanchedata.infrastructure.adapters.provider.metadata.SQLiteConnector;
 import org.bson.Document;
 
 import java.util.Collections;

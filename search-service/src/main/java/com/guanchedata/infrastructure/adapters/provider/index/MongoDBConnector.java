@@ -1,9 +1,10 @@
-package com.guanchedata.mongoDB;
+package com.guanchedata.infrastructure.adapters.provider.index;
 
+import com.guanchedata.infrastructure.ports.WordProvider;
 import com.mongodb.client.*;
 import org.bson.Document;
 
-public class MongoDBConnector {
+public class MongoDBConnector implements WordProvider {
     private static MongoClient mongoClient;
     private static MongoDatabase database;
     private static MongoCollection<Document> collection;
@@ -14,6 +15,7 @@ public class MongoDBConnector {
         this.collection = database.getCollection(collectionName);
     }
 
+    @Override
     public Document findWord(String word) {
         return collection.find(new Document("word", word)).first();
     }
