@@ -24,14 +24,7 @@ public class SearchController {
         Map<String, Object> filters = new HashMap<>();
         if (author != null && !author.isEmpty()) filters.put("author", author);
         if (language != null && !language.isEmpty()) filters.put("language", language);
-        if (yearParam != null && !yearParam.isEmpty()) {
-            try {
-                filters.put("year", Integer.parseInt(yearParam));
-            } catch (NumberFormatException e) {
-                ctx.status(400).json(Map.of("error", "Invalid year format"));
-                return;
-            }
-        }
+        if (yearParam != null && !yearParam.isEmpty()) filters.put("year", yearParam);
 
         List<Map<String, Object>> results = new  ArrayList<>();
         if (query.contains(",") && Arrays.asList(query.split(",")).size() > 1) {
@@ -60,7 +53,6 @@ public class SearchController {
         }
 
         Map<String, Object> response = new LinkedHashMap<>();
-        System.out.println(results);
         response.put("query", query);
         response.put("filters", filters);
         response.put("count", results.size());

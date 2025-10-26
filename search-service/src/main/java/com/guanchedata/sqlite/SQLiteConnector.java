@@ -24,13 +24,57 @@ public class SQLiteConnector {
             for (String key : filters.keySet()) {
                 Object value = filters.get(key);
                 if (value != null) {
-                    if (key.equals("author")) {
-                        sql.append("AND author LIKE ?");
-                        params.add("%" + value + "%");
-                    } else {
-                        sql.append(" AND ").append(key).append(" = ?");
-                        params.add(value);
+                    switch (key) {
+                        case "author":
+                            String authorString = value.toString();
+                            if (authorString.contains(",") &&
+                                    Arrays.asList(authorString.split(",")).size() > 1) {
+                                String[] authors = authorString.split(",");
+                                sql.append(" AND (");
+                                for (int i = 0; i < authors.length; i++) {
+                                    if (i > 0) sql.append(" OR ");
+                                    sql.append("author LIKE ?");
+                                    params.add("%" + authors[i].trim() + "%");
+                                }
+                                sql.append(")");
+                            } else {
+                                sql.append(" AND author LIKE ?");
+                                params.add("%" + authorString.trim() + "%");
+                            }
+                            break;
+                        case "language":
+                            if (value.toString().contains(",") &&
+                                    Arrays.asList(value.toString().split(",")).size() > 1) {
+                                List<String> values = Arrays.asList(value.toString().split(","));
+                                for (String valueSplit : values) {
+                                    sql.append(" AND language LIKE ?");
+                                    params.add("%" + valueSplit + "%");
+                                }
+                            } else {
+                                sql.append(" AND language LIKE ?");
+                                params.add("%" + value + "%");
+                            }
+                            break;
+                        case "year":
+                            String yearString = value.toString();
+                            if (yearString.contains(",") &&
+                                    Arrays.asList(yearString.split(",")).size() > 1) {
+                                String[] years = yearString.split(",");
+                                String placeholdersYears = String.join(",", Collections.nCopies(years.length, "?"));
+                                sql.append(" AND year IN (" + placeholdersYears + ") ");
+                                for (String year : years) {
+                                    params.add(Integer.parseInt(year.trim()));
+                                }
+                            } else {
+                                sql.append(" AND year = ?");
+                                params.add(value);
+                            }
+                            break;
+                        default:
+                            sql.append(" AND ").append(key).append(" = ?");
+                            params.add(value);
                     }
+
                 }
             }
         }
