@@ -9,6 +9,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>control</module>
         <module>indexing-service</module>
         <module>search-service</module>
         <module>ingestion-service</module>
