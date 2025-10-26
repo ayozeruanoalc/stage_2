@@ -9,7 +9,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <!-- put module names here -->
+        <module>indexing-service</module>
         <module>search-service</module>
     </modules>
 
