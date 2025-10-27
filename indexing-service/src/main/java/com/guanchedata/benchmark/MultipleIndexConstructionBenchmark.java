@@ -1,6 +1,6 @@
 package com.guanchedata.benchmark;
 
-import com.guanchedata.BookIndexer;
+import com.guanchedata.infrastructure.adapters.apiservices.BookIndexer;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

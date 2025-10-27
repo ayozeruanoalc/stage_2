@@ -1,6 +1,6 @@
-package com.guanchedata.inverted_index.mongodb;
+package com.guanchedata.infrastructure.adapters.provider.invertedindex;
 
-import com.guanchedata.inverted_index.stopwords.StopwordsLoader;
+import com.guanchedata.infrastructure.adapters.provider.stopwords.StopwordsLoader;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.regex.*;
 
 public class BookIndexProcessor {
 
-    public void processBookFile(Path file, Integer bookId, Map<String, String> languageReferences, String stopwordsPath, Map<String, Set<String>> stopwordsCache, MongoDBInvertedIndex mongoDBInstance) {
+    public void processBookFile(Path file, Integer bookId, Map<String, String> languageReferences, String stopwordsPath, Map<String, Set<String>> stopwordsCache, MongoDBInvertedIndexStore mongoDBInstance) {
         String fileName = file.getFileName().toString();
         Matcher matcher = Pattern.compile("^(\\d+)_").matcher(fileName);
 

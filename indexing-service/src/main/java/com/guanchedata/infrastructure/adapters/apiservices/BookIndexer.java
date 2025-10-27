@@ -1,8 +1,8 @@
-package com.guanchedata;
+package com.guanchedata.infrastructure.adapters.apiservices;
 
-import com.guanchedata.inverted_index.mongodb.MongoDBInvertedIndex;
-import com.guanchedata.metadata.parser.MetadataParser;
-import com.guanchedata.metadata.storage.sqlite.MetadataSQLiteDB;
+import com.guanchedata.infrastructure.adapters.provider.invertedindex.MongoDBInvertedIndexStore;
+import com.guanchedata.infrastructure.adapters.provider.metadata.MetadataParser;
+import com.guanchedata.infrastructure.adapters.provider.metadata.MetadataSQLiteDB;
 
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class BookIndexer {
 
         MetadataParser parser = new MetadataParser(this.datalakePath);
         MetadataSQLiteDB metadataDB = new MetadataSQLiteDB(parser, this.dbPath);
-        MongoDBInvertedIndex mongoDB = new MongoDBInvertedIndex(this.datalakePath, this.stopwordsPath, this.databaseName, this.collectionName);
+        MongoDBInvertedIndexStore mongoDB = new MongoDBInvertedIndexStore(this.datalakePath, this.stopwordsPath, this.databaseName, this.collectionName);
 
         Map<String, String> languages = metadataDB.saveMetadata(bookId);
         mongoDB.buildIndexForBooks(bookId, languages);

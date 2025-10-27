@@ -1,4 +1,4 @@
-package com.guanchedata.metadata.parser;
+package com.guanchedata.infrastructure.adapters.provider.metadata;
 
 import java.io.*;
 import java.nio.file.*;

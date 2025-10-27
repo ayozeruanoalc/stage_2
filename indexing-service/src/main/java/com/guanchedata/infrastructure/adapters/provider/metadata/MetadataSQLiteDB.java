@@ -1,6 +1,6 @@
-package com.guanchedata.metadata.storage.sqlite;
+package com.guanchedata.infrastructure.adapters.provider.metadata;
 
-import com.guanchedata.metadata.parser.MetadataParser;
+import com.guanchedata.infrastructure.ports.MetadataStore;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MetadataSQLiteDB  {
+public class MetadataSQLiteDB implements MetadataStore {
     private final MetadataParser metadataParser;
     private final Path dbPath;
 
@@ -19,6 +19,7 @@ public class MetadataSQLiteDB  {
         this.dbPath = Paths.get(dbPathStr);
     }
 
+    @Override
     public Map<String, String> saveMetadata(int bookId) {
         Map<String, String> metadata = metadataParser.parseMetadata(bookId);
         Map<String, Map<String, String>> allMetadata = new HashMap<>();

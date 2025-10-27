@@ -1,4 +1,9 @@
 package com.guanchedata;
+import com.guanchedata.application.usecases.indexingservice.IndexingController;
+import com.guanchedata.infrastructure.adapters.apiservices.BookIndexer;
+import com.guanchedata.infrastructure.adapters.apiservices.DatalakeBookIdExtractor;
+import com.guanchedata.infrastructure.adapters.apiservices.IndexEraser;
+import com.guanchedata.infrastructure.adapters.apiservices.IndexSizeCalculator;
 import io.javalin.Javalin;
 
 public class Main {

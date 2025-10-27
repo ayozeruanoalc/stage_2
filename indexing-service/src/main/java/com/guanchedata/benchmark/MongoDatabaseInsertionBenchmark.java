@@ -1,6 +1,6 @@
 package com.guanchedata.benchmark;
 
-import com.guanchedata.inverted_index.mongodb.MongoDBInvertedIndex;
+import com.guanchedata.infrastructure.adapters.provider.invertedindex.MongoDBInvertedIndexStore;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.HashMap;
@@ -31,13 +31,13 @@ public class MongoDatabaseInsertionBenchmark {
     @Param({""})
     private String collectionName;
 
-    private MongoDBInvertedIndex mongoDBInvertedIndex;
+    private MongoDBInvertedIndexStore mongoDBInvertedIndex;
 
     private Map<String, String> languageReferences;
 
     @Setup(Level.Trial)
     public void setup() {
-        mongoDBInvertedIndex = new MongoDBInvertedIndex(datalakePath, stopwordsPath, databaseName, collectionName);
+        mongoDBInvertedIndex = new MongoDBInvertedIndexStore(datalakePath, stopwordsPath, databaseName, collectionName);
 
         languageReferences = new HashMap<>();
         languageReferences.put("23", "en");

@@ -1,13 +1,14 @@
-package com.guanchedata;
+package com.guanchedata.application.usecases.indexingservice;
 
 import com.google.gson.Gson;
+import com.guanchedata.infrastructure.adapters.apiservices.BookIndexer;
+import com.guanchedata.infrastructure.adapters.apiservices.DatalakeBookIdExtractor;
+import com.guanchedata.infrastructure.adapters.apiservices.IndexEraser;
+import com.guanchedata.infrastructure.adapters.apiservices.IndexSizeCalculator;
 import io.javalin.http.Context;
 
-import java.sql.SQLOutput;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 

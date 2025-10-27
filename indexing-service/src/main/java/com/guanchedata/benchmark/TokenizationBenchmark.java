@@ -1,7 +1,7 @@
 package com.guanchedata.benchmark;
 
-import com.guanchedata.inverted_index.mongodb.BookIndexProcessor;
-import com.guanchedata.inverted_index.stopwords.StopwordsLoader;
+import com.guanchedata.infrastructure.adapters.provider.invertedindex.BookIndexProcessor;
+import com.guanchedata.infrastructure.adapters.provider.stopwords.StopwordsLoader;
 import org.openjdk.jmh.annotations.*;
 
 import java.nio.file.Path;

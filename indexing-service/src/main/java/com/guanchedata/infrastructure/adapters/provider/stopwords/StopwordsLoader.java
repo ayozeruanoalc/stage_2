@@ -1,4 +1,4 @@
-package com.guanchedata.inverted_index.stopwords;
+package com.guanchedata.infrastructure.adapters.provider.stopwords;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

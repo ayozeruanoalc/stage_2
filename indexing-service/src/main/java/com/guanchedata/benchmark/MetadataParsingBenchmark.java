@@ -1,6 +1,6 @@
 package com.guanchedata.benchmark;
 
-import com.guanchedata.metadata.parser.MetadataParser;
+import com.guanchedata.infrastructure.adapters.provider.metadata.MetadataParser;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.Map;

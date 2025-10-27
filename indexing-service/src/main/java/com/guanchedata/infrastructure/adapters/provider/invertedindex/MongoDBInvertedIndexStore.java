@@ -1,6 +1,6 @@
-package com.guanchedata.inverted_index.mongodb;
+package com.guanchedata.infrastructure.adapters.provider.invertedindex;
 
-import com.guanchedata.inverted_index.InvertedIndex;
+import com.guanchedata.infrastructure.ports.InvertedIndexStore;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoClient;
@@ -15,7 +15,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.Stream;
 
-public class MongoDBInvertedIndex implements InvertedIndex {
+public class MongoDBInvertedIndexStore implements InvertedIndexStore {
 
     private String datalakePath;
     private String stopwordsPath;
@@ -26,7 +26,7 @@ public class MongoDBInvertedIndex implements InvertedIndex {
     private MongoCollection<Document> collection;
     private Map<String, Set<String>> stopwordsCache = new HashMap<>();
 
-    public MongoDBInvertedIndex(String datalakePath, String stopwordsPath, String databaseName, String collectionName) {
+    public MongoDBInvertedIndexStore(String datalakePath, String stopwordsPath, String databaseName, String collectionName) {
         this.datalakePath = datalakePath;
         this.stopwordsPath = stopwordsPath;
         this.databaseName = databaseName;
