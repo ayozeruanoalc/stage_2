@@ -1,7 +1,7 @@
 package com.guanchedata.benchmark;
 
-import com.guanchedata.infrastructure.adapters.provider.metadata.MetadataSQLiteDB;
-import com.guanchedata.infrastructure.adapters.provider.metadata.MetadataParser;
+import com.guanchedata.infrastructure.adapters.storer.metadata.MetadataSQLiteDB;
+import com.guanchedata.infrastructure.adapters.storer.metadata.MetadataParser;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;

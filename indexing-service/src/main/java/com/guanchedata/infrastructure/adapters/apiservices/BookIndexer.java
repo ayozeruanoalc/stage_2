@@ -1,8 +1,8 @@
 package com.guanchedata.infrastructure.adapters.apiservices;
 
-import com.guanchedata.infrastructure.adapters.provider.invertedindex.MongoDBInvertedIndexStore;
-import com.guanchedata.infrastructure.adapters.provider.metadata.MetadataParser;
-import com.guanchedata.infrastructure.adapters.provider.metadata.MetadataSQLiteDB;
+import com.guanchedata.infrastructure.adapters.storer.invertedindex.MongoDBInvertedIndexStore;
+import com.guanchedata.infrastructure.adapters.storer.metadata.MetadataParser;
+import com.guanchedata.infrastructure.adapters.storer.metadata.MetadataSQLiteDB;
 
 import java.util.Map;
 

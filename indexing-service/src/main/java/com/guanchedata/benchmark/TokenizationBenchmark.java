@@ -1,6 +1,6 @@
 package com.guanchedata.benchmark;
 
-import com.guanchedata.infrastructure.adapters.provider.invertedindex.BookIndexProcessor;
+import com.guanchedata.infrastructure.adapters.storer.invertedindex.BookIndexProcessor;
 import com.guanchedata.infrastructure.adapters.provider.stopwords.StopwordsLoader;
 import org.openjdk.jmh.annotations.*;
 

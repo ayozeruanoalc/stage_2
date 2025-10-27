@@ -1,6 +1,6 @@
 package com.guanchedata.benchmark;
 
-import com.guanchedata.infrastructure.adapters.provider.invertedindex.MongoDBInvertedIndexStore;
+import com.guanchedata.infrastructure.adapters.storer.invertedindex.MongoDBInvertedIndexStore;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.HashMap;

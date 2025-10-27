@@ -1,4 +1,4 @@
-package com.guanchedata.infrastructure.adapters.provider.invertedindex;
+package com.guanchedata.infrastructure.adapters.storer.invertedindex;
 
 import com.guanchedata.infrastructure.ports.InvertedIndexStore;
 import com.mongodb.client.MongoCollection;
