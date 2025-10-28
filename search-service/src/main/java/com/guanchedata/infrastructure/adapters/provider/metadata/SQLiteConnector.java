@@ -11,6 +11,34 @@ public class SQLiteConnector implements MetadataProvider {
         this.url = "jdbc:sqlite:" + url;
     }
 
+    private void appendFilter(StringBuilder sql, List<Object> params, String column, Object value) {
+        String[] values = value.toString().split(",");
+
+        if (values.length > 1) {
+            sql.append(" AND (");
+            for (int i = 0; i < values.length; i++) {
+                if (i > 0) sql.append(" OR ");
+                if (column.equals("year")) {
+                    sql.append(column).append(" = ?");
+                    params.add(Integer.parseInt(values[i]));
+                } else {
+                    sql.append(column).append(" LIKE ?");
+                    params.add("%" + values[i].trim() + "%");
+                }
+            }
+            sql.append(")");
+        } else {
+            sql.append(" AND ");
+            if (column.equals("year")) {
+                sql.append(column).append(" = ?");
+                params.add(Integer.parseInt(values[0].trim()));
+            } else {
+                sql.append(column).append(" LIKE ?");
+                params.add("%" + values[0].trim() + "%");
+            }
+        }
+    }
+
     @Override
     public List<Map<String, Object>> findMetadata(List<Integer> ids, Map<String, Object> filters) {
         List<Map<String, Object>> results = new ArrayList<>();
@@ -18,65 +46,14 @@ public class SQLiteConnector implements MetadataProvider {
         if (ids.isEmpty()) return results;
 
         String placeholders = String.join(",", Collections.nCopies(ids.size(), "?"));
-        StringBuilder sql = new StringBuilder("SELECT id, title, author, language, year FROM metadata WHERE id IN ( " + placeholders + " )" );
+        StringBuilder sql = new StringBuilder("SELECT id, title, author, language, year FROM metadata WHERE id IN ( " + placeholders + " )");
 
         List<Object> params = new ArrayList<>(ids);
-
         if (filters != null && !filters.isEmpty()) {
             for (String key : filters.keySet()) {
                 Object value = filters.get(key);
                 if (value != null) {
-                    switch (key) {
-                        case "author":
-                            String authorString = value.toString();
-                            if (authorString.contains(",") &&
-                                    Arrays.asList(authorString.split(",")).size() > 1) {
-                                String[] authors = authorString.split(",");
-                                sql.append(" AND (");
-                                for (int i = 0; i < authors.length; i++) {
-                                    if (i > 0) sql.append(" OR ");
-                                    sql.append("author LIKE ?");
-                                    params.add("%" + authors[i].trim() + "%");
-                                }
-                                sql.append(")");
-                            } else {
-                                sql.append(" AND author LIKE ?");
-                                params.add("%" + authorString.trim() + "%");
-                            }
-                            break;
-                        case "language":
-                            if (value.toString().contains(",") &&
-                                    Arrays.asList(value.toString().split(",")).size() > 1) {
-                                List<String> values = Arrays.asList(value.toString().split(","));
-                                for (String valueSplit : values) {
-                                    sql.append(" AND language LIKE ?");
-                                    params.add("%" + valueSplit + "%");
-                                }
-                            } else {
-                                sql.append(" AND language LIKE ?");
-                                params.add("%" + value + "%");
-                            }
-                            break;
-                        case "year":
-                            String yearString = value.toString();
-                            if (yearString.contains(",") &&
-                                    Arrays.asList(yearString.split(",")).size() > 1) {
-                                String[] years = yearString.split(",");
-                                String placeholdersYears = String.join(",", Collections.nCopies(years.length, "?"));
-                                sql.append(" AND year IN (" + placeholdersYears + ") ");
-                                for (String year : years) {
-                                    params.add(Integer.parseInt(year.trim()));
-                                }
-                            } else {
-                                sql.append(" AND year = ?");
-                                params.add(value);
-                            }
-                            break;
-                        default:
-                            sql.append(" AND ").append(key).append(" = ?");
-                            params.add(value);
-                    }
-
+                    appendFilter(sql, params, key, value);
                 }
             }
         }
