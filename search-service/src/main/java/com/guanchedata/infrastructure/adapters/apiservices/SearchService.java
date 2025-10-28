@@ -4,9 +4,7 @@ import com.guanchedata.infrastructure.adapters.provider.index.MongoDBConnector;
 import com.guanchedata.infrastructure.adapters.provider.metadata.SQLiteConnector;
 import org.bson.Document;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SearchService {
@@ -23,10 +21,30 @@ public class SearchService {
         if (wordDocument == null) return Collections.emptyList();
 
         Document docs = (Document) wordDocument.get("documents");
+
+        Map<Integer, Integer> frequencies = new HashMap<>();
+        for (String key: docs.keySet()) {
+            Document subDoc = (Document) docs.get(key);
+            Integer frequency = subDoc.getInteger("frecuency");
+            frequencies.put(Integer.parseInt(key), frequency);
+        }
+
         List<Integer> docsIds = docs.keySet().stream()
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
 
-        return sqliteConnector.findMetadata(docsIds, filters);
+        List<Map<String, Object>> results = sqliteConnector.findMetadata(docsIds, filters);
+
+        results.sort((a, b) -> {
+            Integer idA = (Integer) a.getOrDefault("id", 0);
+            Integer idB = (Integer) b.getOrDefault("id", 0);
+
+            Integer frequencyA = frequencies.get(idA);
+            Integer frequencyB = frequencies.get(idB);
+
+            return Integer.compare(frequencyB, frequencyA);
+        });
+
+        return results;
     }
 }
