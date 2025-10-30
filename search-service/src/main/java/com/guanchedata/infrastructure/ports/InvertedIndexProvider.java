@@ -2,6 +2,6 @@ package com.guanchedata.infrastructure.ports;
 
 import org.bson.Document;
 
-public interface WordProvider {
+public interface InvertedIndexProvider {
     Document findWord(String word);
 }

@@ -44,7 +44,7 @@ public class MongoDBInvertedIndexStore implements InvertedIndexStore {
         for (Map.Entry<String, List<Integer>> entry : positionMap.entrySet()) {
             String word = entry.getKey();
             List<Integer> positions = entry.getValue();
-            Document data = new Document("frecuency", positions.size())
+            Document data = new Document("frequency", positions.size())
                     .append("position", positions);
 
             operation.add(new UpdateOneModel<>(

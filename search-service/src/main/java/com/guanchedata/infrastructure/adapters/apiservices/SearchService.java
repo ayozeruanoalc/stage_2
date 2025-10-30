@@ -1,23 +1,26 @@
 package com.guanchedata.infrastructure.adapters.apiservices;
 
-import com.guanchedata.infrastructure.adapters.provider.index.MongoDBConnector;
-import com.guanchedata.infrastructure.adapters.provider.metadata.SQLiteConnector;
+import com.guanchedata.infrastructure.ports.MetadataProvider;
+import com.guanchedata.infrastructure.ports.InvertedIndexProvider;
+import com.guanchedata.infrastructure.ports.ResultsSorter;
 import org.bson.Document;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class SearchService {
-    private final MongoDBConnector mongoDBConnector;
-    private final SQLiteConnector sqliteConnector;
+    private final InvertedIndexProvider invertedIndexConnector;
+    private final MetadataProvider metadataConnector;
+    private final ResultsSorter resultsSorter;
 
-    public SearchService(MongoDBConnector mongoDBConnector, SQLiteConnector sqliteConnector) {
-        this.mongoDBConnector = mongoDBConnector;
-        this.sqliteConnector = sqliteConnector;
+    public SearchService(InvertedIndexProvider invertedIndexConnector, MetadataProvider metadataConnector, ResultsSorter resultsSorter) {
+        this.metadataConnector = metadataConnector;
+        this.invertedIndexConnector = invertedIndexConnector;
+        this.resultsSorter = resultsSorter;
     }
 
     public List<Map<String, Object>> search(String word, Map<String, Object> filters) {
-        Document wordDocument = mongoDBConnector.findWord(word.toLowerCase());
+        Document wordDocument = invertedIndexConnector.findWord(word.toLowerCase());
         if (wordDocument == null) return Collections.emptyList();
 
         Document docs = (Document) wordDocument.get("documents");
@@ -25,7 +28,7 @@ public class SearchService {
         Map<Integer, Integer> frequencies = new HashMap<>();
         for (String key: docs.keySet()) {
             Document subDoc = (Document) docs.get(key);
-            Integer frequency = subDoc.getInteger("frecuency");
+            Integer frequency = subDoc.getInteger("frequency");
             frequencies.put(Integer.parseInt(key), frequency);
         }
 
@@ -33,17 +36,11 @@ public class SearchService {
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
 
-        List<Map<String, Object>> results = sqliteConnector.findMetadata(docsIds, filters);
+        List<Map<String, Object>> results = metadataConnector.findMetadata(docsIds, filters);
 
-        results.sort((a, b) -> {
-            Integer idA = (Integer) a.getOrDefault("id", 0);
-            Integer idB = (Integer) b.getOrDefault("id", 0);
+        results.forEach(map -> map.put("frequency", frequencies.get(map.get("id"))));
 
-            Integer frequencyA = frequencies.get(idA);
-            Integer frequencyB = frequencies.get(idB);
-
-            return Integer.compare(frequencyB, frequencyA);
-        });
+        resultsSorter.sort(results, frequencies);
 
         return results;
     }

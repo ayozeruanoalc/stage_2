@@ -67,7 +67,7 @@ public class SQLiteConnector implements MetadataProvider {
 
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
-                Map<String, Object> row = new HashMap<>();
+                Map<String, Object> row = new LinkedHashMap<>();
                 row.put("id", rs.getInt("id"));
                 row.put("title", rs.getString("title"));
                 row.put("author", rs.getString("author"));
