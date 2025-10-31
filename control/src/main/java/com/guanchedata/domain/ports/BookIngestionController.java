@@ -1,6 +1,6 @@
-package com.guanchedata.ports;
+package com.guanchedata.domain.ports;
 
-public interface IngestionPort {
+public interface BookIngestionController {
     void triggerIngestion(int bookId) throws Exception;
     String getStatus(int bookId) throws Exception;
 }

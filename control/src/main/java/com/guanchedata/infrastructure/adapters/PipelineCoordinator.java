@@ -1,16 +1,15 @@
-package com.guanchedata.core;
+package com.guanchedata.infrastructure.adapters;
 
-import com.guanchedata.api.ApiClient;
-import com.guanchedata.ports.IngestionPort;
-import com.guanchedata.ports.IndexingPort;
+import com.guanchedata.domain.ports.BookIngestionController;
+import com.guanchedata.domain.ports.BookIndexController;
 import com.google.gson.JsonObject;
 
-public class BookProcessor implements IngestionPort, IndexingPort {
-    private final ApiClient http;
+public class PipelineCoordinator implements BookIngestionController, BookIndexController {
+    private final RestConnector http;
     private final String ingestionBase;
     private final String indexingBase;
 
-    public BookProcessor(ApiClient http, String ingestionBase, String indexingBase) {
+    public PipelineCoordinator(RestConnector http, String ingestionBase, String indexingBase) {
         this.http = http;
         this.ingestionBase = ingestionBase;
         this.indexingBase = indexingBase;
@@ -24,14 +23,18 @@ public class BookProcessor implements IngestionPort, IndexingPort {
     @Override
     public String getStatus(int bookId) throws Exception {
         JsonObject resp = http.getJson(ingestionBase + "/ingest/status/" + bookId);
-        if (resp.has("status") && !resp.get("status").isJsonNull()) return resp.get("status").getAsString();
+        if (resp != null && resp.has("status") && !resp.get("status").isJsonNull()) {
+            return resp.get("status").getAsString();
+        }
         return "unknown";
     }
 
     @Override
     public String updateIndex(int bookId) throws Exception {
         JsonObject resp = http.postJson(indexingBase + "/index/update/" + bookId, null);
-        if (resp.has("index") && !resp.get("index").isJsonNull()) return resp.get("index").getAsString();
+        if (resp != null && resp.has("index") && !resp.get("index").isJsonNull()) {
+            return resp.get("index").getAsString();
+        }
         return "failed";
     }
 }

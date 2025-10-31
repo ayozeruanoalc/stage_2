@@ -1,7 +1,8 @@
-package com.guanchedata.state;
+package com.guanchedata.infrastructure.state;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.guanchedata.domain.model.StateEntry;
 
 import java.io.IOException;
 import java.io.Reader;

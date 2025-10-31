@@ -1,17 +1,18 @@
-package com.guanchedata.core;
+package com.guanchedata.application.usecases.control;
 
-import com.guanchedata.ports.IngestionPort;
-import com.guanchedata.ports.IndexingPort;
-import com.guanchedata.ports.StatePort;
+import com.guanchedata.domain.ports.BookIngestionController;
+import com.guanchedata.domain.ports.BookIndexController;
+import com.guanchedata.domain.ports.PipelineStateTracker;
 
 public class Orchestrator {
-    private final IngestionPort ingestion;
-    private final IndexingPort indexing;
-    private final StatePort state;
+    private final BookIngestionController ingestion;
+    private final BookIndexController indexing;
+    private final PipelineStateTracker state;
     private final long pollEveryMs;
     private final long pollTimeoutMs;
 
-    public Orchestrator(IngestionPort ingestion, IndexingPort indexing, StatePort state, long pollEveryMs, long pollTimeoutMs) {
+    public Orchestrator(BookIngestionController ingestion, BookIndexController indexing, PipelineStateTracker state,
+                        long pollEveryMs, long pollTimeoutMs) {
         this.ingestion = ingestion;
         this.indexing = indexing;
         this.state = state;
@@ -23,11 +24,11 @@ public class Orchestrator {
         state.markIngesting(bookId);
         ingestion.triggerIngestion(bookId);
 
-        long start = System.currentTimeMillis();
-        while (true) {
+        long deadline = System.currentTimeMillis() + pollTimeoutMs;
+        for (;;) {
             String s = ingestion.getStatus(bookId);
             if ("available".equalsIgnoreCase(s)) break;
-            if (System.currentTimeMillis() - start > pollTimeoutMs) {
+            if (System.currentTimeMillis() >= deadline) {
                 state.markError(bookId, "ingestion-timeout");
                 throw new RuntimeException("Timeout waiting for ingestion: " + bookId);
             }
