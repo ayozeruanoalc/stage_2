@@ -1,19 +1,21 @@
 package com.guanchedata.infrastructure.adapters.apiservices;
 
-import com.guanchedata.infrastructure.adapters.bookprovider.BookDownloadLog;
+import com.guanchedata.infrastructure.ports.BookDownloadStatusStore;
+import com.guanchedata.infrastructure.ports.BookListProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
-public class ListBooksService {
+public class ListBooksService implements BookListProvider {
     private static final Logger log = LoggerFactory.getLogger(ListBooksService.class);
-    private final BookDownloadLog bookDownloadLog;
+    private final BookDownloadStatusStore bookDownloadLog;
 
-    public ListBooksService(BookDownloadLog bookDownloadLog) {
+    public ListBooksService(BookDownloadStatusStore bookDownloadLog) {
         this.bookDownloadLog = bookDownloadLog;
     }
 
+    @Override
     public Map<String, Object> list() {
         log.info("list() - Listing books in the datalake");
         try {

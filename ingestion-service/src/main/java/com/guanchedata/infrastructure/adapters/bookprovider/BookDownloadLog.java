@@ -1,5 +1,7 @@
 package com.guanchedata.infrastructure.adapters.bookprovider;
 
+import com.guanchedata.infrastructure.ports.BookDownloadStatusStore;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -7,23 +9,26 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-public class BookDownloadLog {
+public class BookDownloadLog implements BookDownloadStatusStore {
     private final String downloadedBookFile;
 
     public BookDownloadLog(String downloadedBookFile) {
         this.downloadedBookFile = downloadedBookFile;
     }
 
+    @Override
     public void registerDownload(int bookId) throws IOException {
         Set<Integer> books = loadBooks();
         books.add(bookId);
         saveBooks(bookId);
     }
 
+    @Override
     public boolean isDownloaded(int bookId) throws IOException {
         return loadBooks().contains(bookId);
     }
 
+    @Override
     public List<Integer> getAllDownloaded() throws IOException {
         return new ArrayList<>(loadBooks());
     }

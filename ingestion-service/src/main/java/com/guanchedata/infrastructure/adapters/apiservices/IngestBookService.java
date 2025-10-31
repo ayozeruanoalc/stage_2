@@ -1,25 +1,27 @@
 package com.guanchedata.infrastructure.adapters.apiservices;
 
-import com.guanchedata.infrastructure.adapters.bookprovider.BookDownloadLog;
-import com.guanchedata.infrastructure.adapters.bookprovider.BookStorageDate;
 import com.guanchedata.infrastructure.adapters.bookprovider.GutenbergConnection;
 import com.guanchedata.infrastructure.adapters.bookprovider.GutenbergFetch;
+import com.guanchedata.infrastructure.ports.BookDownloadStatusStore;
+import com.guanchedata.infrastructure.ports.BookDownloader;
+import com.guanchedata.infrastructure.ports.BookStorage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.Map;
 
-public class IngestBookService {
+public class IngestBookService implements BookDownloader {
     private static final Logger log = LoggerFactory.getLogger(IngestBookService.class);
-    private final BookDownloadLog bookDownloadLog;
-    private final BookStorageDate storageDate;
+    private final BookDownloadStatusStore bookDownloadLog;
+    private final BookStorage storageDate;
 
-    public IngestBookService(BookStorageDate storageDate, BookDownloadLog bookDownloadLog) {
+    public IngestBookService(BookStorage storageDate, BookDownloadStatusStore bookDownloadLog) {
         this.storageDate = storageDate;
         this.bookDownloadLog = bookDownloadLog;
     }
 
+    @Override
     public Map<String, Object> ingest(int bookId) {
         log.info("ingest() - Start processing bookId={}", bookId);
 
