@@ -20,19 +20,15 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 public class MongoDatabaseInsertionBenchmark {
 
-    //ruta datalake
     @Param({""})
     private String datalakePath;
 
-    //ruta stopwords
     @Param({""})
     private String stopwordsPath;
 
-    //db name
     @Param({""})
     private String dbName;
 
-    //collection
     @Param({""})
     private String dbCollection;
 

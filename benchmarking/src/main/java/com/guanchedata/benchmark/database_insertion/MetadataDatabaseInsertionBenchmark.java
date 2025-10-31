@@ -20,7 +20,6 @@ import java.sql.SQLException;
 @State(Scope.Thread)
 public class MetadataDatabaseInsertionBenchmark {
 
-    //ruta datalake
     @Param({""})
     private String datalakePath;
 

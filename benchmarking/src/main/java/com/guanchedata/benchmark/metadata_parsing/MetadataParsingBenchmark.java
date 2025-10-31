@@ -11,14 +11,13 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 10)
 @Fork(value=1, jvmArgs = {"-Xmx4G"})
 @State(Scope.Thread)
-public class MetadataParsingBigBookBenchmark {
+public class MetadataParsingBenchmark {
 
-    //ruta datalake
     @Param({""})
     private String datalakePath;
 
     @Param({""})
-    private String idBigBook;
+    private String idBook;
 
     private MetadataParser metadataParser;
 
@@ -29,6 +28,6 @@ public class MetadataParsingBigBookBenchmark {
 
     @Benchmark
     public void benchmarkParseMetadata() {
-        metadataParser.parseMetadata(Integer.parseInt(idBigBook));
+        metadataParser.parseMetadata(Integer.parseInt(idBook));
     }
 }
