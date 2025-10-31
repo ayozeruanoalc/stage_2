@@ -1,8 +1,8 @@
-package com.guanchedata.infrastructure.adapters;
+package com.guanchedata.infrastructure.adapters.noname;
 
-import com.guanchedata.domain.model.PipelineStage;
-import com.guanchedata.domain.ports.PipelineStateTracker;
-import com.guanchedata.infrastructure.state.StateStore;
+import com.guanchedata.domain.PipelineStage;
+import com.guanchedata.infrastructure.ports.PipelineStateTracker;
+import com.guanchedata.infrastructure.adapters.state.StateStore;
 
 import java.io.IOException;
 

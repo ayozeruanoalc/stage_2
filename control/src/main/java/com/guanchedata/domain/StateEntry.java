@@ -1,4 +1,4 @@
-package com.guanchedata.domain.model;
+package com.guanchedata.domain;
 
 public class StateEntry {
     private final int bookId;

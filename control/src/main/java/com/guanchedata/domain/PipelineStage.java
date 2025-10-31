@@ -1,4 +1,4 @@
-package com.guanchedata.domain.model;
+package com.guanchedata.domain;
 
 public enum PipelineStage {
     PENDING, LAUNCHED, INGESTING, DOWNLOADED, INDEXING, INDEXED, FAILED

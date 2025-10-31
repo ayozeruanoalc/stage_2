@@ -1,8 +1,8 @@
-package com.guanchedata.infrastructure.state;
+package com.guanchedata.infrastructure.adapters.state;
 
-import com.guanchedata.domain.model.PipelineStage;
+import com.guanchedata.domain.PipelineStage;
 import com.google.gson.Gson;
-import com.guanchedata.domain.model.StateEntry;
+import com.guanchedata.domain.StateEntry;
 
 import java.io.IOException;
 import java.nio.file.Path;

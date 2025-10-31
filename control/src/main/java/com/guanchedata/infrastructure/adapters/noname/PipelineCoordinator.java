@@ -1,7 +1,7 @@
-package com.guanchedata.infrastructure.adapters;
+package com.guanchedata.infrastructure.adapters.noname;
 
-import com.guanchedata.domain.ports.BookIngestionController;
-import com.guanchedata.domain.ports.BookIndexController;
+import com.guanchedata.infrastructure.ports.BookIngestionController;
+import com.guanchedata.infrastructure.ports.BookIndexController;
 import com.google.gson.JsonObject;
 
 public class PipelineCoordinator implements BookIngestionController, BookIndexController {

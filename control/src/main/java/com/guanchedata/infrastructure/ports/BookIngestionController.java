@@ -1,4 +1,4 @@
-package com.guanchedata.domain.ports;
+package com.guanchedata.infrastructure.ports;
 
 public interface BookIngestionController {
     void triggerIngestion(int bookId) throws Exception;

@@ -1,4 +1,4 @@
-package com.guanchedata.domain.ports;
+package com.guanchedata.infrastructure.ports;
 
 import java.io.IOException;
 

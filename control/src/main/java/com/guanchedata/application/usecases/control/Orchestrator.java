@@ -1,8 +1,8 @@
 package com.guanchedata.application.usecases.control;
 
-import com.guanchedata.domain.ports.BookIngestionController;
-import com.guanchedata.domain.ports.BookIndexController;
-import com.guanchedata.domain.ports.PipelineStateTracker;
+import com.guanchedata.infrastructure.ports.BookIngestionController;
+import com.guanchedata.infrastructure.ports.BookIndexController;
+import com.guanchedata.infrastructure.ports.PipelineStateTracker;
 
 public class Orchestrator {
     private final BookIngestionController ingestion;
