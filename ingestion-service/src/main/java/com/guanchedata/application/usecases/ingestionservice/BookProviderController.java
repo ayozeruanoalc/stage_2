@@ -1,22 +1,22 @@
 package com.guanchedata.application.usecases.ingestionservice;
 
 import com.google.gson.Gson;
-import com.guanchedata.infrastructure.adapters.apiservices.BookStatusService;
-import com.guanchedata.infrastructure.adapters.apiservices.IngestBookService;
-import com.guanchedata.infrastructure.adapters.apiservices.ListBooksService;
+import com.guanchedata.infrastructure.ports.BookDownloader;
+import com.guanchedata.infrastructure.ports.BookListProvider;
+import com.guanchedata.infrastructure.ports.BookStatusProvider;
 import io.javalin.http.Context;
 import java.util.Map;
 
 public class BookProviderController {
-    private final IngestBookService ingestBookService;
-    private final ListBooksService listBooksService;
-    private final BookStatusService bookStatusService;
+    private final BookDownloader ingestBookService;
+    private final BookListProvider listBooksService;
+    private final BookStatusProvider bookStatusService;
     private static final Gson gson = new Gson();
 
     public BookProviderController(
-            IngestBookService ingestBookService,
-            ListBooksService listBooksService,
-            BookStatusService bookStatusService) {
+            BookDownloader ingestBookService,
+            BookListProvider listBooksService,
+            BookStatusProvider bookStatusService) {
         this.ingestBookService = ingestBookService;
         this.listBooksService = listBooksService;
         this.bookStatusService = bookStatusService;

@@ -1,18 +1,20 @@
 package com.guanchedata.infrastructure.adapters.apiservices;
 
-import com.guanchedata.infrastructure.adapters.bookprovider.BookDownloadLog;
+import com.guanchedata.infrastructure.ports.BookDownloadStatusStore;
+import com.guanchedata.infrastructure.ports.BookStatusProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Map;
 
-public class BookStatusService {
+public class BookStatusService implements BookStatusProvider {
     private static final Logger log = LoggerFactory.getLogger(BookStatusService.class);
-    private final BookDownloadLog bookDownloadLog;
+    private final BookDownloadStatusStore bookDownloadLog;
 
-    public BookStatusService(BookDownloadLog bookDownloadLog) {
+    public BookStatusService(BookDownloadStatusStore bookDownloadLog) {
         this.bookDownloadLog = bookDownloadLog;
     }
 
+    @Override
     public Map<String, Object> status(int bookId) {
         log.info("status() - Start execution for bookId={}", bookId);
         try {

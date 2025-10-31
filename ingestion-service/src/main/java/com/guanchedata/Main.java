@@ -7,7 +7,7 @@ import com.guanchedata.infrastructure.adapters.apiservices.ListBooksService;
 import com.guanchedata.infrastructure.adapters.bookprovider.BookDownloadLog;
 import com.guanchedata.infrastructure.adapters.bookprovider.BookStorageDate;
 import com.guanchedata.infrastructure.adapters.bookprovider.GutenbergBookContentSeparator;
-import com.guanchedata.infrastructure.ports.PathGenerator;
+import com.guanchedata.infrastructure.ports.*;
 import com.guanchedata.util.DateTimePathGenerator;
 import io.javalin.Javalin;
 
@@ -15,12 +15,12 @@ public class Main {
     public static void main(String[] args) {
         PathGenerator pathGenerator = new DateTimePathGenerator(args[0]);
         GutenbergBookContentSeparator separator = new GutenbergBookContentSeparator();
-        BookStorageDate storageDate = new BookStorageDate(pathGenerator, separator);
-        BookDownloadLog bookDownloadLog = new BookDownloadLog(args[1]);
+        BookStorage storageDate = new BookStorageDate(pathGenerator, separator);
+        BookDownloadStatusStore bookDownloadLog = new BookDownloadLog(args[1]);
 
-        IngestBookService ingestBookService = new IngestBookService(storageDate, bookDownloadLog);
-        ListBooksService listBooksService = new ListBooksService(bookDownloadLog);
-        BookStatusService bookStatusService = new BookStatusService(bookDownloadLog);
+        BookDownloader ingestBookService = new IngestBookService(storageDate, bookDownloadLog);
+        BookListProvider listBooksService = new ListBooksService(bookDownloadLog);
+        BookStatusProvider bookStatusService = new BookStatusService(bookDownloadLog);
 
         BookProviderController controller = new BookProviderController(
                 ingestBookService,
