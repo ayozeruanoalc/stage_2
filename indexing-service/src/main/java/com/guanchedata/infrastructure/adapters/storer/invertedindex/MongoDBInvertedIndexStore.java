@@ -62,7 +62,6 @@ public class MongoDBInvertedIndexStore implements InvertedIndexStore {
         if (!operation.isEmpty()) {
             collection.bulkWrite(operation, new BulkWriteOptions().ordered(false));
         }
-
     }
 
     public void buildIndexForBooks(Integer bookId, Map<String, String> languageReferences) {

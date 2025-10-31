@@ -1,54 +1,72 @@
 package com.guanchedata.benchmark;
 
 import com.guanchedata.infrastructure.adapters.apiservices.BookIndexer;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 import org.openjdk.jmh.annotations.*;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.MILLISECONDS)
+@OutputTimeUnit(TimeUnit.SECONDS)
 @Warmup(iterations = 5)
 @Measurement(iterations = 10)
-@Fork(1)
+@Fork(value=1, jvmArgs = {"-Xmx4G"})
 @State(Scope.Thread)
 public class MultipleIndexConstructionBenchmark {
 
     //ruta datalake
-    @Param({""})
-    private String arg0;
+    @Param({})
+    private String datalakePath;
 
     //ruta metadata.db
-    @Param({""})
-    private String arg1;
+    @Param({})
+    private String metadataPath;
 
     //ruta stopwords
-    @Param({""})
-    private String arg2;
+    @Param({})
+    private String stopwordsPath;
 
     //nombre db
-    @Param({""})
-    private String arg3;
+    @Param({})
+    private String dbName;
 
     //collection
-    @Param({""})
-    private String arg4;
+    @Param({})
+    private String dbCollection;
 
-    //id book
-    @Param({""})
-    private String arg5;
+    @Param({})
+    private String idBook;
+
+
 
     private BookIndexer bookIndexer;
 
     @Setup(Level.Trial)
     public void setup() {
-        bookIndexer = new BookIndexer(arg0, arg1, arg2, arg3, arg4);
+        bookIndexer = new BookIndexer(datalakePath, metadataPath, stopwordsPath, dbName, dbCollection);
     }
 
     @Benchmark
     public void benchmarkExecute() {
-        int id = Integer.parseInt(arg5);
-        for (int i=1; i<=id; i++) {
-            bookIndexer.execute(i);
+        try {
+            Files.deleteIfExists(Paths.get(metadataPath));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
+        try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
+            MongoDatabase database = mongoClient.getDatabase(dbName);
+            MongoCollection<Document> collection = database.getCollection(dbCollection);
+            collection.deleteMany(new Document());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        bookIndexer.execute(Integer.parseInt(idBook));
     }
 }

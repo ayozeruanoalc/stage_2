@@ -24,20 +24,20 @@ public class MetadataParser {
                     .orElse(null);
 
             if (found != null) {
-                System.out.println("[INDEX] Indexing book " + bookId + ".");
+                //System.out.println("[INDEX] Indexing book " + bookId + ".");
                 try (BufferedReader reader = Files.newBufferedReader(found)) {
                     metadata = extractMetadata(reader);
                     if (!metadata.isEmpty()) {
-                        System.out.println("[INDEX] Book " + bookId + " successfully indexed.\n");
+                        //System.out.println("[INDEX] Book " + bookId + " successfully indexed.\n");
                     } else {
-                        System.out.println("[INDEX] No metadata found in book " + bookId + ".");
+                        //System.out.println("[INDEX] No metadata found in book " + bookId + ".");
                     }
                 }
             } else {
-                System.out.println("[INDEX] No file found for book " + bookId + ".");
+                //System.out.println("[INDEX] No file found for book " + bookId + ".");
             }
         } catch (IOException e) {
-            System.out.println("[INDEX] Error reading metadata for book " + bookId + ": " + e.getMessage());
+            //System.out.println("[INDEX] Error reading metadata for book " + bookId + ": " + e.getMessage());
         }
         return metadata;
     }
