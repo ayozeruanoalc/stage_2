@@ -1,58 +1,46 @@
 package com.guanchedata.core;
 
-import com.guanchedata.api.ApiClient;
-import com.guanchedata.state.StateStore;
-import com.guanchedata.models.BookStatus;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import java.util.List;
-import java.util.Map;
+import com.guanchedata.ports.IngestionPort;
+import com.guanchedata.ports.IndexingPort;
+import com.guanchedata.ports.StatePort;
 
 public class Orchestrator {
+    private final IngestionPort ingestion;
+    private final IndexingPort indexing;
+    private final StatePort state;
+    private final long pollEveryMs;
+    private final long pollTimeoutMs;
 
-    private final ApiClient http;
-    private final StateStore state;
-    private final Gson gson;
-
-    private final String ingestionBase;
-    private final String indexingBase;
-    private final String searchBase;
-
-    private final BookProcessor processor;
-
-    public Orchestrator(ApiClient http, StateStore state, Gson gson,
-                        String ingestionBase, String indexingBase, String searchBase,
-                        int pollIntervalMs, int pollTimeoutMs) {
-
-        this.http = http;
+    public Orchestrator(IngestionPort ingestion, IndexingPort indexing, StatePort state, long pollEveryMs, long pollTimeoutMs) {
+        this.ingestion = ingestion;
+        this.indexing = indexing;
         this.state = state;
-        this.gson = gson;
-        this.ingestionBase = ingestionBase;
-        this.indexingBase = indexingBase;
-        this.searchBase = searchBase;
-
-        IngestionMonitor monitor = new IngestionMonitor(http, state, pollIntervalMs, pollTimeoutMs);
-        this.processor = new BookProcessor(http, state, monitor, ingestionBase, indexingBase);
+        this.pollEveryMs = pollEveryMs;
+        this.pollTimeoutMs = pollTimeoutMs;
     }
 
-    public BookStatus processBook(int bookId) throws Exception {
-        return processor.process(bookId);
-    }
+    public void processBook(int bookId) throws Exception {
+        state.markIngesting(bookId);
+        ingestion.triggerIngestion(bookId);
 
-    public Map<String, Object> rebuildIndex() throws Exception {
-        String url = indexingBase + "/index/rebuild";
-        JsonObject resp = http.postJson(url, null);
-        return gson.fromJson(resp, Map.class);
-    }
+        long start = System.currentTimeMillis();
+        while (true) {
+            String s = ingestion.getStatus(bookId);
+            if ("available".equalsIgnoreCase(s)) break;
+            if (System.currentTimeMillis() - start > pollTimeoutMs) {
+                state.markError(bookId, "ingestion-timeout");
+                throw new RuntimeException("Timeout waiting for ingestion: " + bookId);
+            }
+            Thread.sleep(pollEveryMs);
+        }
 
-    public List<Integer> listIngestedIds() throws Exception {
-        String url = ingestionBase + "/ingest/list";
-        JsonObject resp = http.getJson(url);
-        JsonElement books = resp.get("books");
-        return books == null || !books.isJsonArray()
-                ? List.of()
-                : books.getAsJsonArray().asList().stream().map(JsonElement::getAsInt).toList();
+        state.markIndexing(bookId);
+        String idx = indexing.updateIndex(bookId);
+        if (!"updated".equalsIgnoreCase(idx)) {
+            state.markError(bookId, "indexing-" + idx);
+            throw new RuntimeException("Indexing failed for " + bookId + " -> " + idx);
+        }
+
+        state.markIndexed(bookId);
     }
 }
