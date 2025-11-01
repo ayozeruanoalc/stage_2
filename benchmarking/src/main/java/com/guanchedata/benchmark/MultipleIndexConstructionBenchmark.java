@@ -49,7 +49,7 @@ public class MultipleIndexConstructionBenchmark {
 
     @Setup(Level.Trial)
     public void setup() {
-        bookIndexer = new BookIndexer(datalakePath, metadataPath, stopwordsPath, dbName, dbCollection);
+        bookIndexer = new BookIndexer(datalakePath, metadataPath, stopwordsPath, dbName, dbCollection, "mongodb://localhost:27017");
     }
 
     @Benchmark

@@ -21,19 +21,19 @@ import java.util.concurrent.TimeUnit;
 public class MongoDatabaseInsertionBenchmark {
 
     @Param({""})
-    private String datalakePath;
+    public String datalakePath;
 
     @Param({""})
-    private String stopwordsPath;
+    public String stopwordsPath;
 
     @Param({""})
-    private String dbName;
+    public String dbName;
 
     @Param({""})
-    private String dbCollection;
+    public String dbCollection;
 
     @Param({""})
-    private String idBook;
+    public String idBook;
 
     private MongoDBInvertedIndexStore mongoDBInvertedIndex;
 
@@ -41,7 +41,7 @@ public class MongoDatabaseInsertionBenchmark {
 
     @Setup(Level.Trial)
     public void setup() {
-        mongoDBInvertedIndex = new MongoDBInvertedIndexStore(datalakePath, stopwordsPath, dbName, dbCollection);
+        mongoDBInvertedIndex = new MongoDBInvertedIndexStore("mongodb://localhost:27017", datalakePath, stopwordsPath, dbName, dbCollection);
         languageReferences = new HashMap<>();
     }
 
@@ -63,7 +63,6 @@ public class MongoDatabaseInsertionBenchmark {
             Document emptyDocumentsFilter = new Document("documents", new Document("$eq", new Document()));
             collection.deleteMany(emptyDocumentsFilter);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
 

@@ -26,12 +26,12 @@ public class MongoDBInvertedIndexStore implements InvertedIndexStore {
     private MongoCollection<Document> collection;
     private Map<String, Set<String>> stopwordsCache = new HashMap<>();
 
-    public MongoDBInvertedIndexStore(String datalakePath, String stopwordsPath, String databaseName, String collectionName) {
+    public MongoDBInvertedIndexStore(String mongoPath, String datalakePath, String stopwordsPath, String databaseName, String collectionName) {
         this.datalakePath = datalakePath;
         this.stopwordsPath = stopwordsPath;
         this.databaseName = databaseName;
         this.collectionName = collectionName;
-        this.client = MongoClients.create("mongodb://localhost:27017");
+        this.client = MongoClients.create(mongoPath);
         this.database = client.getDatabase(this.databaseName);
         this.collection = database.getCollection(this.collectionName);
         this.collection.createIndex(new Document("word", 1), new IndexOptions().unique(true));

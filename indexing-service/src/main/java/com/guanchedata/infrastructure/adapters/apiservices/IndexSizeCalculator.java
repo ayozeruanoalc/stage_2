@@ -66,7 +66,6 @@ public class IndexSizeCalculator {
                 ids.add(rs.getInt("id"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return ids;
     }
