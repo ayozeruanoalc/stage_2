@@ -17,14 +17,14 @@ import java.util.stream.Stream;
 
 public class MongoDBInvertedIndexStore implements InvertedIndexStore {
 
-    private String datalakePath;
-    private String stopwordsPath;
-    private String databaseName;
-    private String collectionName;
-    private MongoClient client;
-    private MongoDatabase database;
-    private MongoCollection<Document> collection;
-    private Map<String, Set<String>> stopwordsCache = new HashMap<>();
+    private final String datalakePath;
+    private final String stopwordsPath;
+    private final String databaseName;
+    private final String collectionName;
+    private final MongoClient client;
+    private final MongoDatabase database;
+    private final MongoCollection<Document> collection;
+    private final Map<String, Set<String>> stopwordsCache = new HashMap<>();
 
     public MongoDBInvertedIndexStore(String mongoPath, String datalakePath, String stopwordsPath, String databaseName, String collectionName) {
         this.datalakePath = datalakePath;

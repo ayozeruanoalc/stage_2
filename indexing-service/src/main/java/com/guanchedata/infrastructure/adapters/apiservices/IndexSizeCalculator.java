@@ -15,9 +15,9 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class IndexSizeCalculator {
-    Path metadataDbPath;
-    String invertedIndexDbName;
-    String collectionName;
+    private final Path metadataDbPath;
+    private final String invertedIndexDbName;
+    private final String collectionName;
 
     public IndexSizeCalculator(String metadataDbPath, String invertedIndexDbName, String collectionName) {
         this.metadataDbPath = Paths.get(metadataDbPath);

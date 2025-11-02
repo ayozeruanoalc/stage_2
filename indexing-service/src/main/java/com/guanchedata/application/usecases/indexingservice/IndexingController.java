@@ -13,13 +13,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class IndexingController {
-    private BookIndexer bookIndexer;
-    private IndexEraser indexEraser;
-    private DatalakeBookIdExtractor datalakeBookIdExtractor;
-    private IndexSizeCalculator indexSizeCalculator;
+    private final BookIndexer bookIndexer;
+    private final IndexEraser indexEraser;
+    private final DatalakeBookIdExtractor datalakeBookIdExtractor;
+    private final IndexSizeCalculator indexSizeCalculator;
     private Set<Integer> indexedBooksSet;
     private Instant last_update;
-    private Gson gson;
+    private final Gson gson;
 
     public IndexingController(BookIndexer bookIndexer, IndexEraser indexEraser, DatalakeBookIdExtractor datalakeBookIdExtractor, IndexSizeCalculator indexSizeCalculator) {
         this.bookIndexer = bookIndexer;

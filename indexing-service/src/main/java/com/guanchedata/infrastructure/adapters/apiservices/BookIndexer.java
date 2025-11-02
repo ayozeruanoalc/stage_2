@@ -8,12 +8,12 @@ import java.util.Map;
 
 public class BookIndexer {
 
-    String datalakePath;
-    String dbPath;
-    String stopwordsPath;
-    String databaseName;
-    String collectionName;
-    String mongoPath;
+    private final String datalakePath;
+    private final String dbPath;
+    private final String stopwordsPath;
+    private final String databaseName;
+    private final String collectionName;
+    private final String mongoPath;
 
     public BookIndexer(String datalakePath, String dbPath, String stopwordsPath, String databaseName, String collectionName, String mongoPath) {
         this.datalakePath = datalakePath;

@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 
 public class DatalakeBookIdExtractor {
-    Path datalakePath;
+    private final Path datalakePath;
 
     public DatalakeBookIdExtractor(String datalakePath) {
         this.datalakePath = Paths.get(datalakePath);

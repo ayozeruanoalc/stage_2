@@ -13,9 +13,9 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 
 public class IndexEraser {
-    Path metadataDbPath;
-    String invertedIndexDbName;
-    String collectionName;
+    private final Path metadataDbPath;
+    private final String invertedIndexDbName;
+    private final String collectionName;
 
     public IndexEraser(String metadataDbPath, String invertedIndexDbName, String collectionName){
         this.metadataDbPath = Paths.get(metadataDbPath);
