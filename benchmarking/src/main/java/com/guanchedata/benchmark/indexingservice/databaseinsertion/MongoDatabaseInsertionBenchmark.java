@@ -1,4 +1,4 @@
-package com.guanchedata.benchmark.database_insertion;
+package com.guanchedata.benchmark.indexingservice.databaseinsertion;
 
 import com.guanchedata.infrastructure.adapters.storer.invertedindex.MongoDBInvertedIndexStore;
 import com.mongodb.client.MongoClient;
