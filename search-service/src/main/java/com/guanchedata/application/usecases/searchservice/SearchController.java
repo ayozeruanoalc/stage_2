@@ -1,13 +1,13 @@
 package com.guanchedata.application.usecases.searchservice;
 
-import com.guanchedata.infrastructure.adapters.apiservices.SearchService;
+import com.guanchedata.infrastructure.ports.BookSearchProvider;
 import io.javalin.http.Context;
 import java.util.*;
 
 public class SearchController {
-    private final SearchService searchService;
+    private final BookSearchProvider searchService;
 
-    public SearchController(SearchService searchService) {
+    public SearchController(BookSearchProvider searchService) {
         this.searchService = searchService;
     }
     public void getSearch(Context ctx) {

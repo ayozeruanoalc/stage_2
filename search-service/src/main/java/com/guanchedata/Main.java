@@ -5,6 +5,7 @@ import com.guanchedata.infrastructure.adapters.apiservices.SearchService;
 import com.guanchedata.infrastructure.adapters.provider.index.MongoDBConnector;
 import com.guanchedata.infrastructure.adapters.provider.metadata.SQLiteConnector;
 
+import com.guanchedata.infrastructure.ports.BookSearchProvider;
 import com.guanchedata.infrastructure.ports.MetadataProvider;
 import com.guanchedata.infrastructure.ports.ResultsSorter;
 import com.guanchedata.infrastructure.ports.InvertedIndexProvider;
@@ -29,7 +30,7 @@ public class Main {
             System.err.println("Sorter method must be either 'id' or 'frequency'");
         }
 
-        SearchService searchService = new SearchService(invertedIndexConnector, metadataConnector,  resultsSorter);
+        BookSearchProvider searchService = new SearchService(invertedIndexConnector, metadataConnector,  resultsSorter);
         SearchController searchController = new SearchController(searchService);
 
         Javalin app = Javalin.create(config -> {

@@ -11,34 +11,6 @@ public class SQLiteConnector implements MetadataProvider {
         this.url = "jdbc:sqlite:" + url;
     }
 
-    private void appendFilter(StringBuilder sql, List<Object> params, String column, Object value) {
-        String[] values = value.toString().split(",");
-
-        if (values.length > 1) {
-            sql.append(" AND (");
-            for (int i = 0; i < values.length; i++) {
-                if (i > 0) sql.append(" OR ");
-                if (column.equals("year")) {
-                    sql.append(column).append(" = ?");
-                    params.add(Integer.parseInt(values[i]));
-                } else {
-                    sql.append(column).append(" LIKE ?");
-                    params.add("%" + values[i].trim() + "%");
-                }
-            }
-            sql.append(")");
-        } else {
-            sql.append(" AND ");
-            if (column.equals("year")) {
-                sql.append(column).append(" = ?");
-                params.add(Integer.parseInt(values[0].trim()));
-            } else {
-                sql.append(column).append(" LIKE ?");
-                params.add("%" + values[0].trim() + "%");
-            }
-        }
-    }
-
     @Override
     public List<Map<String, Object>> findMetadata(List<Integer> ids, Map<String, Object> filters) {
         List<Map<String, Object>> results = new ArrayList<>();
@@ -80,5 +52,33 @@ public class SQLiteConnector implements MetadataProvider {
         }
 
         return results;
+    }
+
+    private void appendFilter(StringBuilder sql, List<Object> params, String column, Object value) {
+        String[] values = value.toString().split(",");
+
+        if (values.length > 1) {
+            sql.append(" AND (");
+            for (int i = 0; i < values.length; i++) {
+                if (i > 0) sql.append(" OR ");
+                if (column.equals("year")) {
+                    sql.append(column).append(" = ?");
+                    params.add(Integer.parseInt(values[i]));
+                } else {
+                    sql.append(column).append(" LIKE ?");
+                    params.add("%" + values[i].trim() + "%");
+                }
+            }
+            sql.append(")");
+        } else {
+            sql.append(" AND ");
+            if (column.equals("year")) {
+                sql.append(column).append(" = ?");
+                params.add(Integer.parseInt(values[0].trim()));
+            } else {
+                sql.append(column).append(" LIKE ?");
+                params.add("%" + values[0].trim() + "%");
+            }
+        }
     }
 }

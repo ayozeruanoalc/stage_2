@@ -1,5 +1,6 @@
 package com.guanchedata.infrastructure.adapters.apiservices;
 
+import com.guanchedata.infrastructure.ports.BookSearchProvider;
 import com.guanchedata.infrastructure.ports.MetadataProvider;
 import com.guanchedata.infrastructure.ports.InvertedIndexProvider;
 import com.guanchedata.infrastructure.ports.ResultsSorter;
@@ -8,7 +9,7 @@ import org.bson.Document;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SearchService {
+public class SearchService implements BookSearchProvider {
     private final InvertedIndexProvider invertedIndexConnector;
     private final MetadataProvider metadataConnector;
     private final ResultsSorter resultsSorter;
@@ -19,6 +20,7 @@ public class SearchService {
         this.resultsSorter = resultsSorter;
     }
 
+    @Override
     public List<Map<String, Object>> search(String word, Map<String, Object> filters) {
         Document wordDocument = invertedIndexConnector.findWord(word.toLowerCase());
         if (wordDocument == null) return Collections.emptyList();
