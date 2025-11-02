@@ -1,6 +1,6 @@
 package com.guanchedata.benchmark;
 
-import com.guanchedata.infrastructure.adapters.apiservices.BookIndexer;
+import com.guanchedata.infrastructure.adapters.apiservices.BookIndexerService;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -45,11 +45,11 @@ public class MultipleIndexConstructionBenchmark {
 
 
 
-    private BookIndexer bookIndexer;
+    private BookIndexerService bookIndexerService;
 
     @Setup(Level.Trial)
     public void setup() {
-        bookIndexer = new BookIndexer(datalakePath, metadataPath, stopwordsPath, dbName, dbCollection, "mongodb://localhost:27017");
+        bookIndexerService = new BookIndexerService(datalakePath, metadataPath, stopwordsPath, dbName, dbCollection, "mongodb://localhost:27017");
     }
 
     @Benchmark
@@ -67,6 +67,6 @@ public class MultipleIndexConstructionBenchmark {
             System.out.println(e.getMessage());
         }
 
-        bookIndexer.execute(Integer.parseInt(idBook));
+        bookIndexerService.index(Integer.parseInt(idBook));
     }
 }

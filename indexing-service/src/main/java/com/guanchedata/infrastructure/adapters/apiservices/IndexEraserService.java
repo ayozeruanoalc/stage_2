@@ -7,27 +7,30 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.SQLException;
 
+import com.guanchedata.infrastructure.ports.IndexEraser;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 
-public class IndexEraser {
+public class IndexEraserService implements IndexEraser {
     private final Path metadataDbPath;
     private final String invertedIndexDbName;
     private final String collectionName;
 
-    public IndexEraser(String metadataDbPath, String invertedIndexDbName, String collectionName){
+    public IndexEraserService(String metadataDbPath, String invertedIndexDbName, String collectionName){
         this.metadataDbPath = Paths.get(metadataDbPath);
         this.invertedIndexDbName = invertedIndexDbName;
         this.collectionName = collectionName;
     }
 
+    @Override
     public void erasePreviousIndex(){
         eraseMetadata();
         eraseInvertedIndex();
     }
 
+    @Override
     public void eraseMetadata(){
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + this.metadataDbPath)) {
             Statement stmt = conn.createStatement();
@@ -37,6 +40,7 @@ public class IndexEraser {
         }
     }
 
+    @Override
     public void eraseInvertedIndex(){
         try (MongoClient mongoClient = MongoClients.create("mongodb://localhost:27017")) {
             MongoDatabase db = mongoClient.getDatabase(this.invertedIndexDbName);

@@ -1,4 +1,6 @@
-package com.guanchedata.infrastructure.adapters.apiservices;
+package com.guanchedata.util;
+
+import com.guanchedata.infrastructure.ports.BookIdExtractor;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,13 +8,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashSet;
 
-public class DatalakeBookIdExtractor {
+public class DatalakeBookIdExtractor implements BookIdExtractor {
     private final Path datalakePath;
 
     public DatalakeBookIdExtractor(String datalakePath) {
         this.datalakePath = Paths.get(datalakePath);
     }
 
+    @Override
     public HashSet<Integer> generateDownloadedBooksSet() {
         HashSet<Integer> bookIds = new HashSet<>();
         try {

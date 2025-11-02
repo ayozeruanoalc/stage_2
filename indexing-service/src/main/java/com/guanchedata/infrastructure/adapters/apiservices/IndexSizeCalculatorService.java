@@ -9,27 +9,45 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import com.guanchedata.infrastructure.ports.IndexSizeCalculator;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
-public class IndexSizeCalculator {
+public class IndexSizeCalculatorService implements IndexSizeCalculator {
     private final Path metadataDbPath;
     private final String invertedIndexDbName;
     private final String collectionName;
 
-    public IndexSizeCalculator(String metadataDbPath, String invertedIndexDbName, String collectionName) {
+    public IndexSizeCalculatorService(String metadataDbPath, String invertedIndexDbName, String collectionName) {
         this.metadataDbPath = Paths.get(metadataDbPath);
         this.invertedIndexDbName = invertedIndexDbName;
         this.collectionName = collectionName;
     }
 
+    @Override
     public String getTotalIndexSizeMB() {
         double sqliteSize = getSqliteDbSizeMB();
         double mongoSize = getMongoDbSizeMB();
         String result = String.format(Locale.US, "%.2f", sqliteSize + mongoSize);
         return result;
+    }
+
+    @Override
+    public Set<Integer> getAlreadyIndexedBooksSet() {
+        Set<Integer> ids = new HashSet<>();
+        String url = "jdbc:sqlite:" + this.metadataDbPath;
+        String query = "SELECT id FROM metadata";
+        try (Connection conn = DriverManager.getConnection(url);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                ids.add(rs.getInt("id"));
+            }
+        } catch (SQLException e) {
+        }
+        return ids;
     }
 
     private double getSqliteDbSizeMB() {
@@ -53,20 +71,5 @@ public class IndexSizeCalculator {
             System.err.println("Error reading MongoDB size: " + e.getMessage());
         }
         return sizeMB;
-    }
-
-    public Set<Integer> getAlreadyIndexedBooksSet() {
-        Set<Integer> ids = new HashSet<>();
-        String url = "jdbc:sqlite:" + this.metadataDbPath;
-        String query = "SELECT id FROM metadata";
-        try (Connection conn = DriverManager.getConnection(url);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-            while (rs.next()) {
-                ids.add(rs.getInt("id"));
-            }
-        } catch (SQLException e) {
-        }
-        return ids;
     }
 }
