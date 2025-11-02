@@ -25,7 +25,7 @@ Install the following on your development machine:
     - Verify: `java -version`
 - Maven 3.6+
     - Verify: `mvn -v`
-- curl (for quick endpoint checks)
+- `curl` (for quick endpoint checks)
 
 ---
 
@@ -101,6 +101,38 @@ curl -X POST http://localhost:7002/index/rebuild
 ```
 ```bash
 curl -X GET http://localhost:7002/index/status
+```
+
+### Search Service
+
+```bash
+# (from repo root or individual service directories)
+# Start search-service
+java -jar search-service/target/search-service-1.0-SNAPSHOT.jar [metadataDBPath] [MongoDBURI] [MongoDBName] [MongoDBCollectionName] [sortingCriteria]
+```
+| Argument / Option       | Purpose / meaning                                                            | Example value                                 |
+|-------------------------|-------------------------------------------------------------------------------|-------------------------------------------|
+| metadataDBPath            | Metadata SQlite Database                               | `/metadata/metadata.db`                | 
+| MongoDBURI           | MongoDB Connection URI                             | `mongodb://localhost:27017`                  | 
+| MongoDBName | MongoDB database name | `Big Data` |
+| MongoDBCollectionName | MongoDB collection name | `Inverted Index` |
+| sortingCriteria | Indicate sorting mode for query results: by bookID / by number of appereances of a specific word | `id` / `frequency` |
+
+
+#### Usage
+```bash
+curl -X GET "http://localhost:7003/search?q=mind"
+```
+```bash
+curl -X GET "http://localhost:7003/search?q=mind,heart"
+```
+```bash
+# A space is interpreted as %20 by curl
+curl -X GET "http://localhost:7003/search?q=mind&author=William%20Shakespeare&language=English&year=1994"
+```
+```bash
+# You can avoid that by using a browser:
+http://localhost:7003/search?q=mind&author=William Shakespeare&language=English&year=1994
 ```
 
 <!--
