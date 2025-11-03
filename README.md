@@ -66,13 +66,25 @@ java -jar ingestion-service/target/ingestion-service-1.0-SNAPSHOT.jar [datalakeP
 
 #### Usage
 ```bash
-curl -X POST http://localhost:7001/ingest/1
+curl -X POST http://localhost:7001/ingest/201
 ```
 ```bash
-curl -X GET http://localhost:7001/ingest/status/1
+# OUTPUT
+{"status":"downloaded","book_id":201,"path":"C:/..."}
+```
+```bash
+curl -X GET http://localhost:7001/ingest/status/201
+```
+```bash
+# OUTPUT
+{"book_id":201,"status":"available"}
 ```
 ```bash
 curl -X GET http://localhost:7001/ingest/list
+```
+```bash
+# OUTPUT
+{"count":2,"books":[1,201]}
 ```
 
 ### Indexing Service
@@ -95,6 +107,10 @@ java -jar indexing-service/target/indexing-service-1.0-SNAPSHOT.jar [datalakePat
 #### Usage
 ```bash
 curl -X POST http://localhost:7002/index/update/1
+```
+```bash
+OUTPUT
+# {"book_id":201,"index":"updated"}
 ```
 ```bash
 curl -X POST http://localhost:7002/index/rebuild
@@ -134,6 +150,30 @@ curl -X GET "http://localhost:7003/search?q=mind&author=William%20Shakespeare&la
 # You can avoid that by using a browser:
 http://localhost:7003/search?q=mind&author=William Shakespeare&language=English&year=1994
 ```
+
+### Control Module
+
+```bash
+# (from repo root or individual service directories)
+# Start control
+java -jar control/target/control-1.0-SNAPSHOT.jar [stateJSON] [bookID | bookID1, bookID2...]
+```
+| Argument / Option       | Purpose / meaning                                                            | Example value                                 |
+|-------------------------|-------------------------------------------------------------------------------|-------------------------------------------|
+| stateJSON            | JSON file that tracks if a book has been already indexed                            | `/logs/state.json`                | 
+| bookID(s)           | Book or books to be processed by the pipeline                            | `1` / `1 2 3 4`                  | 
+
+
+#### Output examples
+```bash
+--> PUT OUTPUT EXAMPLES HERE
+```
+
+## Benchmarks
+
+
+
+
 
 <!--
 
