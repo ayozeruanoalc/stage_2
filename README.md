@@ -234,12 +234,24 @@ java -jar control/target/control-1.0-SNAPSHOT.jar [stateJSON] [bookID | bookID1,
 | Argument / Option       | Purpose / meaning                                                            | Example value                                 |
 |-------------------------|-------------------------------------------------------------------------------|-------------------------------------------|
 | stateJSON            | JSON file that tracks if a book has been already indexed                            | `/logs/state.json`                | 
-| bookID(s)           | Book or books to be processed by the pipeline                            | `1` / `1 2 3 4`                  | 
+| bookID(s)           | Book or books to be processed by the pipeline                            | `1` / `1 2 3`                  | 
 
 
 #### Output examples
 ```bash
-
+[STATE] Book 1 -> Stage: INGESTING (not persisted yet)
+[STATE] Book 1 -> Stage: INDEXING (saved)
+[STATE] Book 1 -> Stage: INDEXED (saved)
+{"book_id":1,"status":"ok"}
+[STATE] Book 2 -> Stage: INGESTING (not persisted yet)
+[STATE] Book 2 -> Stage: INDEXING (saved)
+[STATE] Book 2 -> Stage: INDEXED (saved)
+{"book_id":2,"status":"ok"}
+[STATE] Book 3 -> Stage: INGESTING (not persisted yet)
+[STATE] Book 3 -> Stage: INDEXING (saved)
+[STATE] Book 3 -> Stage: INDEXED (saved)
+{"book_id":3,"status":"ok"}
+state_size=3
 ```
 
 ## Benchmarks
