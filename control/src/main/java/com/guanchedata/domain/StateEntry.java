@@ -15,6 +15,10 @@ public class StateEntry {
 
     public void setStage(String stage) { this.stage = stage; }
 
+    public String getStage() {
+        return stage;
+    }
+
     @Override
     public String toString() {
         return "StateEntry{id=" + bookId + ", stage=" + stage + ", path=" + path + ", error=" + error + "}";

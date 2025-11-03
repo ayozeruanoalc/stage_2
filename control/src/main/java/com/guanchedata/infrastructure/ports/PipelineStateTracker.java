@@ -8,4 +8,5 @@ public interface PipelineStateTracker {
     void markIndexed(int bookId) throws IOException;
     void markError(int bookId, String errorCode);
     int size();
+    boolean isProcessed(int bookId);
 }

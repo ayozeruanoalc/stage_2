@@ -40,6 +40,10 @@ public class ControlRunner implements MainRunner {
         Orchestrator orchestrator = new Orchestrator(api, api, state, pollIntervalMs, pollTimeoutMs);
 
         for (int id : bookIds) {
+            if (state.isProcessed(id)) {
+                System.out.println("{\"book_id\":" + id + ",\"status\":\"skipped_already_indexed\"}");
+                continue;
+            }
             try {
                 orchestrator.processBook(id);
                 System.out.println("{\"book_id\":" + id + ",\"status\":\"ok\"}");

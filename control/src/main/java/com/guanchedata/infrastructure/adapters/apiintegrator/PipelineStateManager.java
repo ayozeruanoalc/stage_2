@@ -37,4 +37,6 @@ public class PipelineStateManager implements PipelineStateTracker {
     public int size() {
         return store.size();
     }
+
+    @Override public boolean isProcessed(int bookId) { return store.isProcessed(bookId); }
 }

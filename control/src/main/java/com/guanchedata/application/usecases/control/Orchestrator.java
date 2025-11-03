@@ -21,6 +21,11 @@ public class Orchestrator {
     }
 
     public void processBook(int bookId) throws Exception {
+        if (state.isProcessed(bookId)) {
+            System.out.println("{\"book_id\":"+bookId+",\"status\":\"skipped_already_indexed\"}");
+            return;
+        }
+
         state.markIngesting(bookId);
         ingestion.triggerIngestion(bookId);
 

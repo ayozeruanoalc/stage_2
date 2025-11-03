@@ -37,4 +37,9 @@ public class StateStore {
     public void setError(int bookId, String error) {
         System.err.println("[STATE] Book " + bookId + " -> ERROR: " + error);
     }
+
+    public boolean isProcessed(int bookId) {
+        StateEntry e = states.get(bookId);
+        return e != null && "INDEXED".equalsIgnoreCase(e.getStage());
+    }
 }
