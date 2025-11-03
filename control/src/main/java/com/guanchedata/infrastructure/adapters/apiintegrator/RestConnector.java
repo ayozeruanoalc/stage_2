@@ -1,4 +1,4 @@
-package com.guanchedata.infrastructure.adapters.noname;
+package com.guanchedata.infrastructure.adapters.apiintegrator;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

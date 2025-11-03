@@ -1,4 +1,4 @@
-package com.guanchedata.infrastructure.adapters.noname;
+package com.guanchedata.infrastructure.adapters.apiintegrator;
 
 import com.guanchedata.infrastructure.ports.BookIngestionController;
 import com.guanchedata.infrastructure.ports.BookIndexController;

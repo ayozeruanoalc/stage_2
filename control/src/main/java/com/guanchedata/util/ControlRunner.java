@@ -1,10 +1,10 @@
 package com.guanchedata.util;
 
 import com.guanchedata.application.usecases.control.Orchestrator;
-import com.guanchedata.infrastructure.adapters.noname.RestConnector;
-import com.guanchedata.infrastructure.adapters.noname.PipelineCoordinator;
-import com.guanchedata.infrastructure.adapters.noname.PipelineStateManager;
-import com.guanchedata.infrastructure.adapters.state.StateStore;
+import com.guanchedata.infrastructure.adapters.apiintegrator.RestConnector;
+import com.guanchedata.infrastructure.adapters.apiintegrator.PipelineCoordinator;
+import com.guanchedata.infrastructure.adapters.apiintegrator.PipelineStateManager;
+import com.guanchedata.infrastructure.adapters.statestorer.StateStore;
 import com.guanchedata.infrastructure.ports.PipelineStateTracker;
 import com.google.gson.Gson;
 

@@ -1,4 +1,4 @@
-package com.guanchedata.infrastructure.adapters.state;
+package com.guanchedata.infrastructure.adapters.statestorer;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
