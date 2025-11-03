@@ -5,6 +5,7 @@ import com.guanchedata.infrastructure.adapters.apiintegrator.RestConnector;
 import com.guanchedata.infrastructure.adapters.apiintegrator.PipelineCoordinator;
 import com.guanchedata.infrastructure.adapters.apiintegrator.PipelineStateManager;
 import com.guanchedata.infrastructure.adapters.statestorer.StateStore;
+import com.guanchedata.infrastructure.ports.MainRunner;
 import com.guanchedata.infrastructure.ports.PipelineStateTracker;
 import com.google.gson.Gson;
 
@@ -13,8 +14,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ControlRunner {
+public class ControlRunner implements MainRunner {
 
+    @Override
     public void run(String[] args) throws Exception {
         if (args == null || args.length < 2) {
             System.err.println("usage: java com.guanchedata.Main <state_file_path> <bookId> [<bookId> ...]");
