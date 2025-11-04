@@ -54,7 +54,7 @@ public class SearchService {
 
         results.forEach(map -> map.put("frequency", frequencies.get(map.get("id"))));
 
-        resultsSorter.sort(results, frequencies);
+        resultsSorter.sort(results);
 
         return results;
     }

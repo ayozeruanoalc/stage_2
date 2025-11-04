@@ -8,7 +8,7 @@ import java.util.Map;
 
 public final class ResultsSorterByFreq implements ResultsSorter {
     @Override
-    public void sort(List<Map<String, Object>> results, Map<Integer, Integer> frequencies) {
+    public void sort(List<Map<String, Object>> results) {
         results.sort(Comparator.<Map<String, Object>>comparingInt(a -> (Integer) a.get("frequency")).reversed());
     }
 }

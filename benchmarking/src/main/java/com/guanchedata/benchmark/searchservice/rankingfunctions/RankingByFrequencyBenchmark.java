@@ -38,6 +38,6 @@ public class RankingByFrequencyBenchmark {
     @Benchmark
     public void benchmarkSortByFrequency() {
         ResultsSorterByFreq sorter = new ResultsSorterByFreq();
-        sorter.sort(books, null);
+        sorter.sort(books);
     }
 }
