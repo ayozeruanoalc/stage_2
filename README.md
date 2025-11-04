@@ -1,4 +1,3 @@
-
 # Search Engine - Stage 2
 
 ## Introduction
@@ -8,8 +7,6 @@ Welcome to the Search Engine Stage 2 project. This repository contains the sourc
 This README provides detailed instructions on building, running, benchmarking, and managing the components, helping developers and users to quickly get started and understand the workflow.
 
 
-
----
 
 ## Prerequisites
 
@@ -21,7 +18,6 @@ Install the following on your development machine:
     - Verify: `mvn -v`
 - `curl` (for quick endpoint checks)
 
----
 
 ## Building
 
@@ -42,7 +38,6 @@ mvn -T1C -pl ingestion-service,indexing-service,search-service,control clean pac
 Notes:
 - Artifact JARs are produced under each service's `target/` directory (e.g. `ingestion-service/target/ingestion-service-1.0-SNAPSHOT.jar`).
 
----
 
 ## Running
 
@@ -317,17 +312,6 @@ idBook=[bookID]
 ### Running the Integration Benchmarks
 
 To run the Integration benchmarks, first ensure that the three API services ingestion, indexing, and query are up and running. Once these services are started, you can execute the benchmarks without needing to specify any arguments.
-
-
-
-
-
-
-
-
-
-
-
 
 
 
