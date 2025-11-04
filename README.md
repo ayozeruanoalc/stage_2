@@ -250,7 +250,9 @@ state_size=3
 
 ## Benchmarks
 
+
 To evaluate the performance of this project, microbenchmarking and integration benchmarking tests were conducted using **[JMH (Java Microbenchmark Harness)](https://openjdk.org/projects/code-tools/jmh/)** — an official OpenJDK tool designed for precise Java method performance measurement.
+The benchmarks were run from IntelliJ IDEA using the ["JMH Java Microbenchmark Harness"](https://plugins.jetbrains.com/plugin/7529-jmh-java-microbenchmark-harness) from [Sergey Ponomarev](https://plugins.jetbrains.com/vendor/d848ca38-90d6-4adc-86df-9bf931fd8908).
 
 ### Configuration
 
