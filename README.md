@@ -312,6 +312,3 @@ idBook=[bookID]
 ### Running the Integration Benchmarks
 
 To run the Integration benchmarks, first ensure that the three API services ingestion, indexing, and query are up and running. Once these services are started, you can execute the benchmarks without needing to specify any arguments.
-
-
-
