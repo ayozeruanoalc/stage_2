@@ -38,6 +38,6 @@ public class RankingByIDBenchmark{
     @Benchmark
 public void benchmarkSortByID() {
         ResultsSorterById sorter = new ResultsSorterById();
-        sorter.sort(books, null);
+        sorter.sort(books);
     }
 }
