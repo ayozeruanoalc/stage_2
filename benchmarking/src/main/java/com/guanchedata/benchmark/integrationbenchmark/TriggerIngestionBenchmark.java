@@ -1,4 +1,4 @@
-package com.guanchedata.benchmark;
+package com.guanchedata.benchmark.integrationbenchmark;
 
 import com.guanchedata.infrastructure.adapters.apiintegrator.PipelineCoordinator;
 import com.guanchedata.infrastructure.adapters.apiintegrator.RestConnector;

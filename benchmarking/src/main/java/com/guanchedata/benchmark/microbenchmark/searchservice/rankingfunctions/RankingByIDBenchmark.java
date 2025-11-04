@@ -1,6 +1,6 @@
-package com.guanchedata.benchmark.searchservice.rankingfunctions;
+package com.guanchedata.benchmark.microbenchmark.searchservice.rankingfunctions;
 
-import com.guanchedata.util.ResultsSorterByFreq;
+import com.guanchedata.util.ResultsSorterById;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.*;
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 10)
 @Fork(value=1, jvmArgs = {"-Xmx4G"})
 @State(Scope.Thread)
-public class RankingByFrequencyBenchmark {
+public class RankingByIDBenchmark{
 
     @Param({"10", "100", "1000"})
     private int numberOfBooks;
@@ -36,8 +36,8 @@ public class RankingByFrequencyBenchmark {
     }
 
     @Benchmark
-    public void benchmarkSortByFrequency() {
-        ResultsSorterByFreq sorter = new ResultsSorterByFreq();
+public void benchmarkSortByID() {
+        ResultsSorterById sorter = new ResultsSorterById();
         sorter.sort(books, null);
     }
 }

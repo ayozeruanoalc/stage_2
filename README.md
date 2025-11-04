@@ -91,13 +91,13 @@ curl -X GET http://localhost:7001/ingest/list
 # Start indexing-service
 java -jar indexing-service/target/indexing-service-1.0-SNAPSHOT.jar [datalakePath] [metadataDBPath] [stopWordsReference] [MongoDBName] [MongoDBCollectionName] [MongoDBURI]
 ```
-| Argument / Option       | Purpose / meaning                                                            | Example value                                 |
-|-------------------------|-------------------------------------------------------------------------------|-------------------------------------------|
-| datalakePath            | Path to datalake                               | `/data/datalake`                | 
-| metadataDBPath            | File for storing metadata (SQlite database)                              | `/metadata/metadata.db`                  | 
+| Argument / Option       | Purpose / meaning                                                            | Example value                               |
+|-------------------------|-------------------------------------------------------------------------------|-----------------------------------------|
+| datalakePath            | Path to datalake                               | `/data/datalake`              | 
+| metadataDBPath            | File for storing metadata (SQlite database)                              | `/metadata/metadata.db`                | 
 | stopWordsReference | JSON with stopword references for a bunch of languages (file provided in resources)| `indexing-service/src/main/resources/stopwords-iso.json` |
-| MongoDBName | MongoDB database name | `Big Data` |
-| MongoDBCollectionName | MongoDB collection name | `Inverted Index` |
+| MongoDBName | MongoDB database name | `BigData` |
+| MongoDBCollectionName | MongoDB collection name | `InvertedIndex` |
 | MongoDBURI | MongoDB connection URI | `mongodb://localhost:27017` |
 
 
@@ -128,12 +128,12 @@ curl -X GET http://localhost:7002/index/status
 # Start search-service
 java -jar search-service/target/search-service-1.0-SNAPSHOT.jar [metadataDBPath] [MongoDBURI] [MongoDBName] [MongoDBCollectionName] [sortingCriteria]
 ```
-| Argument / Option       | Purpose / meaning                                                            | Example value                                 |
-|-------------------------|-------------------------------------------------------------------------------|-------------------------------------------|
-| metadataDBPath            | Metadata SQlite Database                               | `/metadata/metadata.db`                | 
-| MongoDBURI           | MongoDB Connection URI                             | `mongodb://localhost:27017`                  | 
-| MongoDBName | MongoDB database name | `Big Data` |
-| MongoDBCollectionName | MongoDB collection name | `Inverted Index` |
+| Argument / Option       | Purpose / meaning                                                            | Example value                               |
+|-------------------------|-------------------------------------------------------------------------------|-----------------------------------------|
+| metadataDBPath            | Metadata SQlite Database                               | `/metadata/metadata.db`              | 
+| MongoDBURI           | MongoDB Connection URI                             | `mongodb://localhost:27017`                | 
+| MongoDBName | MongoDB database name | `BigData` |
+| MongoDBCollectionName | MongoDB collection name | `InvertedIndex` |
 | sortingCriteria | Indicate sorting mode for query results: by bookID / by number of appereances of a specific word | `id` / `frequency` |
 
 

@@ -1,4 +1,4 @@
-package com.guanchedata.benchmark;
+package com.guanchedata.benchmark.integrationbenchmark;
 
 import com.guanchedata.util.ControlRunner;
 import org.openjdk.jmh.annotations.*;

@@ -1,4 +1,4 @@
-package com.guanchedata.benchmark.indexingservice.metadataparsing;
+package com.guanchedata.benchmark.microbenchmark.indexingservice.metadataparsing;
 
 import com.guanchedata.infrastructure.adapters.storer.metadata.MetadataParser;
 import org.openjdk.jmh.annotations.*;
