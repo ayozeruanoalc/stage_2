@@ -1,19 +1,13 @@
 
 # Search Engine - Stage 2
 
-## Overview
+## Introduction
 
-```bash
-├── benchmarking/                                    # Load-testing scripts, scenarios and result collectors (wrk/hey/ab examples)  
-├── control/                                         # Orchestration & management helpers (docker-compose, deployment scripts, start/stop helpers)  
-├── ingestion-service/                               # Service that fetches and pre-processes documents (collectors, parsers, normalizers)  
-├── indexing-service/                                # Service responsible for building/storing indexes (tokenization, metadata extraction)  
-├── search-service/                                  # REST search API and retrieval logic (query endpoints, ranking, pagination)  
-├── src/main/resources/additional-files-for-testing/ # Small corpora, fixtures and test resources used by unit/integration tests  
-├── .gitignore                                       # Git ignore rules  
-├── pom.xml                                          # Maven multi-module configuration (project build)  
-└── README.md                                        # This file
-```
+Welcome to the Search Engine Stage 2 project. This repository contains the source code and resources for building a scalable and efficient search engine composed of several modular microservices. Each module handles different aspects of the pipeline, including ingestion, indexing, searching, and control.
+
+This README provides detailed instructions on building, running, benchmarking, and managing the components, helping developers and users to quickly get started and understand the workflow.
+
+
 
 ---
 
@@ -256,25 +250,71 @@ state_size=3
 
 ## Benchmarks
 
-To evaluate the performance of this project, microbenchmarking tests were conducted using **[JMH (Java Microbenchmark Harness)](https://openjdk.org/projects/code-tools/jmh/)** — an official OpenJDK tool designed for precise Java method performance measurement at the nanosecond level.
+To evaluate the performance of this project, microbenchmarking and integration benchmarking tests were conducted using **[JMH (Java Microbenchmark Harness)](https://openjdk.org/projects/code-tools/jmh/)** — an official OpenJDK tool designed for precise Java method performance measurement.
 
 ### Configuration
 
 Benchmarks were executed under the following conditions:
 
-| Parameter | Value |
-|------------|--------|
-| **JMH Version** | 1.36 |
-| **JDK** | OpenJDK 17 |
-| **Benchmark Mode** | `AverageTime` (average execution time per operation) |
-| **Warmup** | 5 iterations |
-| **Measurement** | 10 iterations |
-| **Forks** | 1 |
-| **jvmArgs** | {"-Xmx4G"} |
+| Parameter | Value                                           |
+|------------|-------------------------------------------------|
+| **JMH Version** | 1.36                                            |
+| **JDK** | OpenJDK 17                                      |
+| **Benchmark Mode** | `Throughput` (measures the number of operations executed per second) |
+| **Warmup** | 5 iterations                                    |
+| **Measurement** | 10 iterations                                   |
+| **Forks** | 1                                               |
+| **jvmArgs** | {"-Xmx4G"}                                      |
 
-### Running the Benchmarks
+### Running the Microbenchmarks
+
+### Passing Arguments to Microbenchmarks
+
+If a benchmark requires arguments, you only need to modify the Run Configuration of the benchmark by adding the necessary parameters according to the @Params annotations of the respective benchmark, and follow the steps below.
+
+If a benchmark has a single @Param with predefined values, it can be run without specifying arguments.
+
+```java
+@Param({"10", "100", "1000"})
+private int numberOfBooks;
+```
 
 
+For example, for the MetadataDatabaseInsertionBenchmark, you can run it with arguments as shown:
+#### MetadataDatabaseInsertionBenchmark
+
+```java
+@Param({""})
+private String datalakePath;
+
+@Param({""})
+private String metadataPath;
+
+@Param({""})
+private String idBook;
+```
+
+
+```bash
+# Arguments:
+com.guanchedata.benchmark.microbenchmark.indexingservice.databaseinsertion.MetadataDatabaseInsertionBenchmark.*
+-p
+datalakePath=[datalakePath]
+-p
+metadataPath=[metadataPath]
+-p
+idBook=[bookID]
+```
+
+| Argument      | Purpose / Description                           | Example value            |
+|---------------|------------------------------------------------|-------------------------|
+| datalakePath  | Path to the data lake directory                 | `/data/datalake`         |
+| metadataPath  | Path to the metadata database                    | `/metadata/metadata.db`  |
+| idBook        | Identifier of the book to process                | `201`                   |
+
+### Running the Integration Benchmarks
+
+To run the Integration benchmarks, first ensure that the three API services ingestion, indexing, and query are up and running. Once these services are started, you can execute the benchmarks without needing to specify any arguments.
 
 
 

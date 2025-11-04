@@ -21,7 +21,6 @@ public class MetadataDatabaseInsertionBenchmark {
     @Param({""})
     private String datalakePath;
 
-    //ruta metadata.db
     @Param({""})
     private String metadataPath;
 
