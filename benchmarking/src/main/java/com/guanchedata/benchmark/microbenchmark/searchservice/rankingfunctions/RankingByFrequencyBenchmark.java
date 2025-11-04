@@ -6,7 +6,7 @@ import org.openjdk.jmh.annotations.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @Warmup(iterations = 5)
 @Measurement(iterations = 10)
@@ -38,6 +38,6 @@ public class RankingByFrequencyBenchmark {
     @Benchmark
     public void benchmarkSortByFrequency() {
         ResultsSorterByFreq sorter = new ResultsSorterByFreq();
-        sorter.sort(books, null);
+        sorter.sort(books);
     }
 }
