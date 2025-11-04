@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @Warmup(iterations = 5)
 @Measurement(iterations = 10)
@@ -47,7 +47,7 @@ public class MongoDatabaseInsertionBenchmark {
 
     @Benchmark
     public void benchmarkBuildIndexForBooks() {
-        languageReferences.put(idBook, "english");
+        languageReferences.put(idBook, "italian");
         mongoDBInvertedIndex.buildIndexForBooks(Integer.parseInt(idBook), languageReferences);
     }
 
