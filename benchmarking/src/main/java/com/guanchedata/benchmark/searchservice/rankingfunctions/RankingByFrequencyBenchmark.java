@@ -6,7 +6,7 @@ import org.openjdk.jmh.annotations.*;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.SECONDS)
 @Warmup(iterations = 5)
 @Measurement(iterations = 10)

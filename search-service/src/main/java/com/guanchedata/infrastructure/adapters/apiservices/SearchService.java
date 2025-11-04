@@ -19,22 +19,36 @@ public class SearchService {
         this.resultsSorter = resultsSorter;
     }
 
-    public List<Map<String, Object>> search(String word, Map<String, Object> filters) {
-        Document wordDocument = invertedIndexConnector.findWord(word.toLowerCase());
-        if (wordDocument == null) return Collections.emptyList();
-
-        Document docs = (Document) wordDocument.get("documents");
-
+    public Map<Integer, Integer> getFrequencies(Document document) {
         Map<Integer, Integer> frequencies = new HashMap<>();
-        for (String key: docs.keySet()) {
-            Document subDoc = (Document) docs.get(key);
-            Integer frequency = subDoc.getInteger("frequency");
+        for (String key : document.keySet()) {
+            Document subDocument = (Document) document.get(key);
+            Integer frequency = subDocument.getInteger("frequency");
             frequencies.put(Integer.parseInt(key), frequency);
         }
+        return frequencies;
+    }
 
-        List<Integer> docsIds = docs.keySet().stream()
+    public Document getDocByWord(String word) {
+        Document wordDocument = invertedIndexConnector.findWord(word.toLowerCase());
+        if (wordDocument == null) return null;
+        return (Document) wordDocument.get("documents");
+    }
+
+    public List<Integer> getBooksContainsWord(String word){
+        Document docs = getDocByWord(word);
+        return docs.keySet().stream()
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
+    }
+
+    public List<Map<String, Object>> search(String word, Map<String, Object> filters) {
+        Document docs = getDocByWord(word);
+        if (docs == null) return Collections.emptyList();
+
+        List<Integer> docsIds = getBooksContainsWord(word);
+
+        Map<Integer, Integer> frequencies = getFrequencies(docs);
 
         List<Map<String, Object>> results = metadataConnector.findMetadata(docsIds, filters);
 
