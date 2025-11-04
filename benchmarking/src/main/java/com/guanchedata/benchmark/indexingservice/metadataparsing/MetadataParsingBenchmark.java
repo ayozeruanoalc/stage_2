@@ -1,0 +1,33 @@
+package com.guanchedata.benchmark.indexingservice.metadataparsing;
+
+import com.guanchedata.infrastructure.adapters.storer.metadata.MetadataParser;
+import org.openjdk.jmh.annotations.*;
+
+import java.util.concurrent.TimeUnit;
+
+@BenchmarkMode(Mode.Throughput)
+@OutputTimeUnit(TimeUnit.SECONDS)
+@Warmup(iterations = 5)
+@Measurement(iterations = 10)
+@Fork(value=1, jvmArgs = {"-Xmx4G"})
+@State(Scope.Thread)
+public class MetadataParsingBenchmark {
+
+    @Param({""})
+    private String datalakePath;
+
+    @Param({""})
+    private String idBook;
+
+    private MetadataParser metadataParser;
+
+    @Setup(Level.Trial)
+    public void setup() {
+        metadataParser = new MetadataParser(datalakePath);
+    }
+
+    @Benchmark
+    public void benchmarkParseMetadata() {
+        metadataParser.parseMetadata(Integer.parseInt(idBook));
+    }
+}

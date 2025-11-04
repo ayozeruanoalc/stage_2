@@ -38,6 +38,11 @@ public class MetadataSQLiteDB implements MetadataStore {
     private String insertMetadata(int id, String title, String author, String language, String year) {
         try {
             Path parentDir = this.dbPath.getParent();
+
+            if(parentDir == null){
+                parentDir=this.dbPath;
+            }
+
             if (!Files.exists(parentDir)) {
                 Files.createDirectories(parentDir);
             }

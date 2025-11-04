@@ -1,10 +1,11 @@
 package com.guanchedata.application.usecases.indexingservice;
 
 import com.google.gson.Gson;
-import com.guanchedata.infrastructure.adapters.apiservices.BookIndexer;
-import com.guanchedata.infrastructure.adapters.apiservices.DatalakeBookIdExtractor;
-import com.guanchedata.infrastructure.adapters.apiservices.IndexEraser;
-import com.guanchedata.infrastructure.adapters.apiservices.IndexSizeCalculator;
+import com.guanchedata.infrastructure.adapters.apiservices.*;
+import com.guanchedata.infrastructure.ports.BookIdExtractor;
+import com.guanchedata.infrastructure.ports.BookIndexer;
+import com.guanchedata.infrastructure.ports.IndexEraser;
+import com.guanchedata.infrastructure.ports.IndexSizeCalculator;
 import io.javalin.http.Context;
 
 import java.time.Duration;
@@ -13,27 +14,28 @@ import java.util.Map;
 import java.util.Set;
 
 public class IndexingController {
-    private BookIndexer bookIndexer;
-    private IndexEraser indexEraser;
-    private DatalakeBookIdExtractor datalakeBookIdExtractor;
-    private IndexSizeCalculator indexSizeCalculator;
+    private final BookIndexer bookIndexer;
+    private final IndexEraser indexEraserService;
+    private final BookIdExtractor datalakeBookIdExtractor;
+    private final IndexSizeCalculator indexSizeCalculatorService;
     private Set<Integer> indexedBooksSet;
     private Instant last_update;
-    private Gson gson;
+    private final Gson gson;
 
-    public IndexingController(BookIndexer bookIndexer, IndexEraser indexEraser, DatalakeBookIdExtractor datalakeBookIdExtractor, IndexSizeCalculator indexSizeCalculator) {
+    public IndexingController(BookIndexer bookIndexer, IndexEraser indexEraserService, BookIdExtractor datalakeBookIdExtractor,
+                              IndexSizeCalculator indexSizeCalculatorService) {
         this.bookIndexer = bookIndexer;
-        this.indexEraser = indexEraser;
+        this.indexEraserService = indexEraserService;
         this.datalakeBookIdExtractor = datalakeBookIdExtractor;
-        this.indexSizeCalculator = indexSizeCalculator;
-        this.indexedBooksSet = this.indexSizeCalculator.getAlreadyIndexedBooksSet();
+        this.indexSizeCalculatorService = indexSizeCalculatorService;
+        this.indexedBooksSet = this.indexSizeCalculatorService.getAlreadyIndexedBooksSet();
         this.last_update = Instant.EPOCH;
         this.gson = new Gson();
     }
 
     public void indexBook(Context ctx){
         int bookId = Integer.parseInt(ctx.pathParam("book_id"));
-        this.bookIndexer.execute(bookId);
+        this.bookIndexer.index(bookId);
         this.indexedBooksSet.add(bookId);
         this.last_update = Instant.now();
         Map<String, Object> response = Map.of( "index", "updated","book_id", bookId);
@@ -41,11 +43,11 @@ public class IndexingController {
     }
 
     public void rebuildIndex(Context ctx){
-        this.indexEraser.erasePreviousIndex();
+        this.indexEraserService.erasePreviousIndex();
         this.indexedBooksSet = this.datalakeBookIdExtractor.generateDownloadedBooksSet();
         Instant start = Instant.now();
         for (int bookId : this.indexedBooksSet){
-            this.bookIndexer.execute(bookId);
+            this.bookIndexer.index(bookId);
         }
         Instant end = Instant.now();
         double elapsedSeconds = Duration.between(start, end).toMillis() / 1000.0;
@@ -59,9 +61,8 @@ public class IndexingController {
             Map<String, Object> response = Map.of(
                     "books_indexed", this.indexedBooksSet.size(),
                     "last_update", this.last_update.toString(),
-                    "index_size_MB", this.indexSizeCalculator.getTotalIndexSizeMB()
+                    "index_size_MB", this.indexSizeCalculatorService.getTotalIndexSizeMB()
             );
             ctx.result(gson.toJson(response));
     }
-
 }
