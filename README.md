@@ -20,7 +20,7 @@ Este repositorio contiene el código fuente y los recursos necesarios para const
 
 Este README proporciona instrucciones detalladas para compilar, ejecutar, realizar benchmarks y gestionar los distintos componentes, permitiendo a desarrolladores y usuarios comenzar rápidamente y comprender el flujo completo del sistema.
 
-La arquitectura presentada en este stage sienta las bases del sistema, permitiendo su extensión natural hacia una solución distribuida y tolerante a fallos desarrollada en el ![**Stage 3**](https://github.com/ayozeruanoalc/stage_3).
+La arquitectura presentada en este stage sienta las bases del sistema, permitiendo su extensión natural hacia una solución distribuida y tolerante a fallos desarrollada en el [**Stage 3**](https://github.com/ayozeruanoalc/stage_3).
 
 ## 🧱 Arquitectura general
 
