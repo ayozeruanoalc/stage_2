@@ -1,45 +1,91 @@
-# Search Engine - Stage 2
+# Book Search Engine - Stage 2
 
-## Introduction
+[![My Skills](https://go-skill-icons.vercel.app/api/icons?i=java,maven,api,mongodb,sqlite,idea,github)](https://go-skill-icons.vercel.app/api/)
 
-Welcome to the Search Engine Stage 2 project. This repository contains the source code and resources for building a scalable and efficient search engine composed of several modular microservices. Each module handles different aspects of the pipeline, including ingestion, indexing, searching, and control.
+## 📑 Tabla de contenidos
 
-This README provides detailed instructions on building, running, benchmarking, and managing the components, helping developers and users to quickly get started and understand the workflow.
+- [✨ Introducción](#-introducción)
+- [🧱 Arquitectura general](#-arquitectura-general)
+- [🧠 Principios de diseño](#-principios-de-diseño)
+- [📐 Diagrama de arquitectura](#-diagrama-de-arquitectura)
+- [📦 Prerrequisitos](#-prerrequisitos)
+- [🔨 Compilación](#-compilación)
+- [▶️ Ejecución](#️-ejecución)
+- [📊 Benchmarks](#-benchmarks)
+
+## ✨ Introducción
+
+Bienvenido al proyecto **Book Search Engine – Stage 2**.
+Este repositorio contiene el código fuente y los recursos necesarios para construir un motor de búsqueda escalable y eficiente, compuesto por varios microservicios modulares. Cada módulo se encarga de una fase distinta del pipeline, incluyendo ingestión, indexación, búsqueda y control.
+
+Este README proporciona instrucciones detalladas para compilar, ejecutar, realizar benchmarks y gestionar los distintos componentes, permitiendo a desarrolladores y usuarios comenzar rápidamente y comprender el flujo completo del sistema.
+
+La arquitectura presentada en este stage sienta las bases del sistema, permitiendo su extensión natural hacia una solución distribuida y tolerante a fallos desarrollada en el ![**Stage 3**](https://github.com/ayozeruanoalc/stage_3).
+
+## 🧱 Arquitectura general
+
+El sistema sigue una **arquitectura orientada a microservicios**, donde cada servicio es responsable de una etapa específica del procesamiento de datos.
+
+Los componentes principales son:
+- **Ingestion Service**: descarga y almacena el contenido bruto de los libros en el datalake.
+- **Indexing Service**: procesa los documentos, extrae metadatos y construye el índice invertido.
+- **Search Service**: expone la API pública para realizar consultas y filtrado de resultados.
+- **Control Module**: coordina y orquesta el flujo completo entre los servicios.
+
+Todos los servicios se comunican mediante **REST APIs** usando mensajes **JSON**, y pueden ejecutarse y desplegarse de forma independiente. Cada uno expone su REST API en un puerto dedicado:
+
+- **Ingestion Service** → `7001`
+- **Indexing Service** → `7002`
+- **Search Service** → `7003`
 
 
+## 🧠 Principios de diseño
 
-## Prerequisites
+- Arquitectura modular basada en microservicios.
+- Separación clara de responsabilidades entre servicios.
+- Uso de **Hexagonal Architecture (Ports & Adapters)** para desacoplar la lógica de negocio de la infraestructura.
+- Operaciones de indexación **idempotentes**, evitando duplicados.
+- Configuración externa de rutas, bases de datos y parámetros de ejecución.
+- Preparación explícita para escalado horizontal y evolución a sistemas distribuidos.
 
-Install the following on your development machine:
+## 📐 Diagrama de arquitectura
+
+![Diagrama de arquitectura - Stage 2](docs/architecture-stage2.png)
+
+## 📦 Prerrequisitos
+
+Instala lo siguiente en tu máquina de desarrollo:
 
 - Java JDK 17
-    - Verify: `java -version`
+    - Verificación: `java -version`
 - Maven 3.6+
-    - Verify: `mvn -v`
-- `curl` (for quick endpoint checks)
+    - Verificación: `mvn -v`
+- `curl` (para comprobaciones rápidas de endpoints)
 
 
-## Building
+## 🔨 Compilación
 
-Two common approaches:
+Dos enfoques habituales:
 
-1) Build one microservice (replace `{service-dir}` with actual directory)
+1) Compilar un microservicio individual (reemplazar `{service-dir}` por el directorio deseado, p.e. `ingestion-service`)
 ```bash
 cd {service-dir}
 mvn clean package
 ```
 
-2) Build entire multi-module project from repo root
+2) Compilar todo el proyecto multi-módulo desde la raíz
 ```bash
 # from repository root
 mvn -T1C -pl ingestion-service,indexing-service,search-service,control clean package
 ```
 
-Notes:
-- Artifact JARs are produced under each service's `target/` directory (e.g. `ingestion-service/target/ingestion-service-1.0-SNAPSHOT.jar`).
+Notas:
+- `-T1C` habilita compilación paralela utilizando un hilo por núcleo disponible.
+- `-pl` permite seleccionar explícitamente los módulos a compilar dentro del proyecto multi-módulo.
+- Los JARs se generan en el directorio `target/` de cada servicio. (p.e. `ingestion-service/target/ingestion-service-1.0-SNAPSHOT.jar`).
 
 
-## Running
+## ▶️ Ejecución
 
 ### Ingestion Service
 
@@ -48,12 +94,12 @@ Notes:
 # Start ingestion-service
 java -jar ingestion-service/target/ingestion-service-1.0-SNAPSHOT.jar [datalakePath] [logsFilePath]
 ```
-| Argument / Option       | Purpose / meaning                                                            | Example value                                 |
+| Argumento       | Descripción                                                           | Ejemplo                                 |
 |-------------------------|-------------------------------------------------------------------------------|-------------------------------------------|
-| datalakePath            | Path to folder where raw files will be stored                               | `/data/datalake`                | 
-| logsFilePath            | File where the app writes its own ingestion log                              | `/var/log/ingestion.log`                  | 
+| datalakePath            | Ruta donde se almacenan los archivos                               | `/data/datalake`                | 
+| logsFilePath            | Fichero de logs del servicio                             | `/var/log/ingestion.log`                  | 
 
-#### Usage
+#### Uso
 ```bash
 curl -X POST http://localhost:7001/ingest/201
 ```
@@ -80,17 +126,17 @@ curl -X GET http://localhost:7001/ingest/list
 # Start indexing-service
 java -jar indexing-service/target/indexing-service-1.0-SNAPSHOT.jar [datalakePath] [metadataDBPath] [stopWordsReference] [MongoDBName] [MongoDBCollectionName] [MongoDBURI]
 ```
-| Argument / Option       | Purpose / meaning                                                            | Example value                               |
+| Argumento       | Descripción                                                          | Ejemplo                              |
 |-------------------------|-------------------------------------------------------------------------------|-----------------------------------------|
-| datalakePath            | Path to datalake                               | `/data/datalake`              | 
-| metadataDBPath            | File for storing metadata (SQlite database)                              | `/metadata/metadata.db`                | 
-| stopWordsReference | JSON with stopword references for a bunch of languages (file provided in resources)| `indexing-service/src/main/resources/stopwords-iso.json` |
-| MongoDBName | MongoDB database name | `BigData` |
-| MongoDBCollectionName | MongoDB collection name | `InvertedIndex` |
-| MongoDBURI | MongoDB connection URI | `mongodb://localhost:27017` |
+| datalakePath            | Ruta del datalake                               | `/data/datalake`              | 
+| metadataDBPath            | Base de datos SQLite para metadatos                              | `/metadata/metadata.db`                | 
+| stopWordsReference | JSON de stopwords, incluyendo diversos idiomas (archivo disponible en `/resources`)| `indexing-service/src/main/resources/stopwords-iso.json` |
+| MongoDBName | Nombre de la DB | `BigData` |
+| MongoDBCollectionName | Colección | `InvertedIndex` |
+| MongoDBURI | URI MongoDB | `mongodb://localhost:27017` |
 
 
-#### Usage
+#### Uso
 ```bash
 curl -X POST http://localhost:7002/index/update/201
 ```
@@ -117,16 +163,16 @@ curl -X GET http://localhost:7002/index/status
 # Start search-service
 java -jar search-service/target/search-service-1.0-SNAPSHOT.jar [metadataDBPath] [MongoDBURI] [MongoDBName] [MongoDBCollectionName] [sortingCriteria]
 ```
-| Argument / Option       | Purpose / meaning                                                            | Example value                               |
+| Argumento       | Descripción                                                            | Ejemplo                              |
 |-------------------------|-------------------------------------------------------------------------------|-----------------------------------------|
-| metadataDBPath            | Metadata SQlite Database                               | `/metadata/metadata.db`              | 
-| MongoDBURI           | MongoDB Connection URI                             | `mongodb://localhost:27017`                | 
-| MongoDBName | MongoDB database name | `BigData` |
-| MongoDBCollectionName | MongoDB collection name | `InvertedIndex` |
-| sortingCriteria | Indicate sorting mode for query results: by bookID / by number of appereances of a specific word | `id` / `frequency` |
+| metadataDBPath            | Base de datos SQLite (metadatos)                             | `/metadata/metadata.db`              | 
+| MongoDBURI           | URI MongoDB                             | `mongodb://localhost:27017`                | 
+| MongoDBName | Nombre de la DB | `BigData` |
+| MongoDBCollectionName | Colección | `InvertedIndex` |
+| sortingCriteria | Indica el modo de orden aplicado sobre los resultados de búsqueda: por bookID / por número de apariciones de una palabra en específico | `id` / `frequency` |
 
 
-#### Usage
+#### Uso
 ```bash
 curl -X GET "http://localhost:7003/search?q=mind"
 ```
@@ -184,11 +230,11 @@ curl -X GET "http://localhost:7003/search?q=mind,heart"
 }
 ```
 ```bash
-# A space is interpreted as %20 by curl
+# Un espacio es interpretado como %20 por el comando curl
 curl -X GET "http://localhost:7003/search?q=mind&author=William%20Shakespeare&language=English&year=1994"
 ```
 ```bash
-# You can avoid that by using a browser:
+# Se puede evitar usando un navegador:
 http://localhost:7003/search?q=mind&author=William Shakespeare&language=English&year=1994
 ```
 ```json
@@ -218,15 +264,15 @@ http://localhost:7003/search?q=mind&author=William Shakespeare&language=English&
 ```bash
 # (from repo root or individual service directories)
 # Start control
-java -jar control/target/control-1.0-SNAPSHOT.jar [stateJSON] [bookID | bookID1, bookID2...]
+java -jar control/target/control-1.0-SNAPSHOT.jar [stateJSON] [bookID | bookID1 bookID2...]
 ```
-| Argument / Option       | Purpose / meaning                                                            | Example value                                 |
+| Argumento      | Descripción                                                            | Ejemplo                                |
 |-------------------------|-------------------------------------------------------------------------------|-------------------------------------------|
-| stateJSON            | JSON file that tracks if a book has been already indexed                            | `/logs/state.json`                | 
-| bookID(s)           | Book or books to be processed by the pipeline                            | `1` / `1 2 3`                  | 
+| stateJSON            | Archivo JSON que controla si un libro ya ha sido indexado                          | `/logs/state.json`                | 
+| bookID(s)           | Libro(s) a ser procesado(s) por el pipeline                           | `1` / `1 2 3`                  | 
 
 
-#### Output examples
+#### Ejemplos de output
 ```bash
 [STATE] Book 1 -> Stage: INGESTING (not persisted yet)
 [STATE] Book 1 -> Stage: INDEXING (saved)
@@ -243,33 +289,33 @@ java -jar control/target/control-1.0-SNAPSHOT.jar [stateJSON] [bookID | bookID1,
 state_size=3
 ```
 
-## Benchmarks
+## 📊 Benchmarks
 
 
-To evaluate the performance of this project, microbenchmarking and integration benchmarking tests were conducted using **[JMH (Java Microbenchmark Harness)](https://openjdk.org/projects/code-tools/jmh/)** — an official OpenJDK tool designed for precise Java method performance measurement.
-The benchmarks were run from IntelliJ IDEA using the ["JMH Java Microbenchmark Harness"](https://plugins.jetbrains.com/plugin/7529-jmh-java-microbenchmark-harness) from [Sergey Ponomarev](https://plugins.jetbrains.com/vendor/d848ca38-90d6-4adc-86df-9bf931fd8908).
+Para evaluar el rendimiento, se realizaron **microbenchmarks y benchmarks de integración** utilizando **[JMH (Java Microbenchmark Harness)](https://openjdk.org/projects/code-tools/jmh/)** — una herramienta oficial de OpenJDK diseñada para la medición precisa del rendimiento de métodos en Java.
+Los benchmarks se ejecutaron desde IntelliJ IDEA utilizando el plugin ["JMH Java Microbenchmark Harness"](https://plugins.jetbrains.com/plugin/7529-jmh-java-microbenchmark-harness) de [Sergey Ponomarev](https://plugins.jetbrains.com/vendor/d848ca38-90d6-4adc-86df-9bf931fd8908).
 
-### Configuration
+### Configuración
 
-Benchmarks were executed under the following conditions:
+Los benchmarks se ejecutaron bajo las siguientes condiciones:
 
-| Parameter | Value                                           |
+| Parámetro | Valor                                          |
 |------------|-------------------------------------------------|
 | **JMH Version** | 1.36                                            |
 | **JDK** | OpenJDK 17                                      |
-| **Benchmark Mode** | `Throughput` (measures the number of operations executed per second) |
-| **Warmup** | 5 iterations                                    |
-| **Measurement** | 10 iterations                                   |
+| **Benchmark Mode** | `Throughput` (operaciones por segundo) |
+| **Warmup** | 5 iteraciones                                    |
+| **Measurement** | 10 iteraciones                                   |
 | **Forks** | 1                                               |
 | **jvmArgs** | {"-Xmx4G"}                                      |
 
-### Running the Microbenchmarks
+### Ejecución de microbenchmarks
 
-### Passing Arguments to Microbenchmarks
+### Paso de argumentos a los microbenchmarks
 
-If a benchmark requires arguments, you only need to modify the Run Configuration of the benchmark by adding the necessary parameters according to the @Params annotations of the respective benchmark, and follow the steps below.
+Si un benchmark requiere argumentos, basta con modificar la **Run Configuration** del benchmark en IntelliJ, añadiendo los parámetros necesarios según las anotaciones `@Params` del benchmark correspondiente.
 
-If a benchmark has a single @Param with predefined values, it can be run without specifying arguments.
+Si un benchmark tiene un único `@Param` con valores predefinidos, puede ejecutarse sin especificar argumentos adicionales.
 
 ```java
 @Param({"10", "100", "1000"})
@@ -277,7 +323,7 @@ private int numberOfBooks;
 ```
 
 
-For example, for the MetadataDatabaseInsertionBenchmark, you can run it with arguments as shown:
+Por ejemplo, el `MetadataDatabaseInsertionBenchmark` se puede ejecutar con argumentos de esta manera:
 #### MetadataDatabaseInsertionBenchmark
 
 ```java
@@ -293,7 +339,7 @@ private String idBook;
 
 
 ```bash
-# Arguments:
+# Argumentos:
 com.guanchedata.benchmark.microbenchmark.indexingservice.databaseinsertion.MetadataDatabaseInsertionBenchmark.*
 -p
 datalakePath=[datalakePath]
@@ -303,12 +349,13 @@ metadataPath=[metadataPath]
 idBook=[bookID]
 ```
 
-| Argument      | Purpose / Description                           | Example value            |
+| Argumento      | Descripción                           | Ejemplo           |
 |---------------|------------------------------------------------|-------------------------|
-| datalakePath  | Path to the data lake directory                 | `/data/datalake`         |
-| metadataPath  | Path to the metadata database                    | `/metadata/metadata.db`  |
-| idBook        | Identifier of the book to process                | `201`                   |
+| datalakePath  | Ruta al directorio del datalake                | `/data/datalake`         |
+| metadataPath  | Ruta a la base de datos de metadatos                   | `/metadata/metadata.db`  |
+| idBook        | Identificador del libro a procesar                | `201`                   |
 
-### Running the Integration Benchmarks
+### Ejecución de benchmarks de integración
 
-To run the Integration benchmarks, first ensure that the three API services ingestion, indexing, and query are up and running. Once these services are started, you can execute the benchmarks without needing to specify any arguments.
+Para ejecutar los benchmarks de integración, es necesario que los tres servicios API (**Ingestion, Indexing y Search**) estén activos.
+Una vez iniciados, los benchmarks pueden ejecutarse sin necesidad de especificar argumentos adicionales.
