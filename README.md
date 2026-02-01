@@ -12,6 +12,7 @@
 - [🔨 Compilación](#-compilación)
 - [▶️ Ejecución](#️-ejecución)
 - [📊 Benchmarks](#-benchmarks)
+- [👥 Autores](#-autores)
 
 ## ✨ Introducción
 
@@ -359,3 +360,11 @@ idBook=[bookID]
 
 Para ejecutar los benchmarks de integración, es necesario que los tres servicios API (**Ingestion, Indexing y Search**) estén activos.
 Una vez iniciados, los benchmarks pueden ejecutarse sin necesidad de especificar argumentos adicionales.
+
+## 👥 Autores
+
+- **Fabio Nesta Arteaga** — 🔗 [GitHub](https://github.com/NestX10)
+- **Pablo Cabeza** — 🔗 [GitHub](https://github.com/pabcablan)
+- **Joel Ojeda** — 🔗 [GitHub](https://github.com/joelojeda)
+- **Enrique Reina** — 🔗 [GitHub](https://github.com/ellupe)
+- **Ayoze Ruano** — 🔗 [GitHub](https://github.com/ayozeruanoalc)
